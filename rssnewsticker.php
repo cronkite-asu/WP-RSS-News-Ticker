@@ -16,6 +16,8 @@
  */
 
 namespace Rssnewsticker;
+include_once 'includes/remote.php';
+include_once 'includes/remote_json.php';
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
