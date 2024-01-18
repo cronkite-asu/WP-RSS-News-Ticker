@@ -109,7 +109,6 @@ class Rssnewsticker {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_public_styles' ));
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_public_scripts' ));
 		add_action('init', array( $this, 'add_rss_feed'));
-
 	}
 
 	/**
