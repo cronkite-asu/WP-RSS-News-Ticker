@@ -1,6 +1,11 @@
 <?php
 namespace Rssnewsticker;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class RemoteJSON extends Remote {
 
 	/**

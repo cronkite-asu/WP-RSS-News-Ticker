@@ -18,6 +18,7 @@
 namespace Rssnewsticker;
 include_once 'includes/remote.php';
 include_once 'includes/remote_json.php';
+include_once 'includes/remote_ap_headlines.php';
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -347,37 +348,14 @@ class Rssnewsticker {
 		$productid = get_option($this->plugin_name . '_ap_productid');
 		$page_size = get_option($this->plugin_name . '_ap_page_size');
 		$api_key = get_option($this->plugin_name . '_ap_api_key');
-
-		$body = $this->get_ap_api($productid, $page_size, $api_key);
-		$headlines = $this->parse_ap_headlines($body);
 		$pre_feed = get_option($this->plugin_name . '_ap_pre_feed');
 
+		$remote_request = new RemoteAPHeadlines( $productid, $api_key, $page_size );
+		$remote_request->run();
+
+		$headlines = $remote_request->get_ap_headlines();
+
 		array_unshift($headlines, $pre_feed);
-		return $headlines;
-	}
-
-	public function get_ap_api($productid, $page_size, $api_key) {
-		$url = sprintf("https://api.ap.org/media/v/content/feed?q=productid:%s&include=headline&in_my_plan=true&page_size=%s", $productid, $page_size);
-		$args = array(
-			'headers' => array(
-				"Accept" => "application/json",
-				"x-api-key" => $api_key
-			)
-		);
-		$response = wp_safe_remote_get($url, $args);
-
-		if ( ! is_wp_error( $response ) ) { //return
-			return wp_remote_retrieve_body( $response );
-		}
-	}
-
-	public function parse_ap_headlines($json) {
-		$obj = json_decode($json);
-		$items = $obj->data->items;
-		$headlines = [];
-		foreach ($items as $item) {
-			array_push($headlines, $item->item->headline);
-		}
 		return $headlines;
 	}
 
