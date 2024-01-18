@@ -16,6 +16,8 @@
  */
 
 namespace Rssnewsticker;
+include_once 'includes/settings.php';
+include_once 'includes/settings-page.php';
 include_once 'includes/remote.php';
 include_once 'includes/remote_json.php';
 include_once 'includes/remote_ap_headlines.php';
@@ -54,6 +56,12 @@ class Rssnewsticker {
 	protected $version;
 
 	/**
+	 * Settings
+	 * @var [type]
+	 */
+	protected $settings;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -69,6 +77,7 @@ class Rssnewsticker {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'rssnewsticker';
+		$this->settings = new SettingsPage();
 
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
@@ -194,10 +203,10 @@ class Rssnewsticker {
 	public function section_callback($arguments) {
 		switch($arguments['id']) {
 			case 'config_section':
-				echo 'Set to read text from a Google Doc to RSS feed';
+				echo 'Set to read text from an Associated Press to RSS feed';
 				break;
 			case 'test_section':
-				echo 'Test reading text from a Google Doc to RSS feed';
+				echo 'Test reading feed from a Associated Press to RSS feed';
 				break;
 		}
 	}
