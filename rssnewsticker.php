@@ -346,7 +346,7 @@ class Rssnewsticker {
 	}
 
 	public function add_rss_feed() {
-		add_feed(get_option($this->plugin_name . '_feed_name'), array( $this, 'rss_callback' ));
+		add_feed($this->settings->get_option('feed_name'), array( $this, 'rss_callback' ));
 	}
 
 	public function rss_callback() {
@@ -354,10 +354,10 @@ class Rssnewsticker {
 	}
 
 	public function fetch_ap_headlines() {
-		$productid = get_option($this->plugin_name . '_ap_productid');
-		$page_size = get_option($this->plugin_name . '_ap_page_size');
-		$api_key = get_option($this->plugin_name . '_ap_api_key');
-		$pre_feed = get_option($this->plugin_name . '_ap_pre_feed');
+		$productid = $this->settings->get_option('ap_productid');
+		$page_size = $this->settings->get_option('ap_page_size');
+		$api_key = $this->settings->get_option('ap_api_key');
+		$pre_feed = $this->settings->get_option('ap_pre_feed');
 
 		$remote_request = new RemoteAPHeadlines( $productid, $api_key, $page_size );
 		$remote_request->run();
