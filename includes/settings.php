@@ -220,9 +220,31 @@ abstract class Settings {
 	 * @return void
 	 */
 	public function render_text( $args ) {
+		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
 		?>
-		<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" />
+		<input type="text" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" />
+		<?php
+		if ( ! empty( $args['description'] ) ) {
+			?>
+			<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
+			<?php
+		}
+	}
+
+	/**
+	 * Render Number input
+	 *
+	 * @param $args
+	 * @return void
+	 */
+	public function render_number( $args ) {
+		$class = ! empty( $args['class'] ) ? $args['class'] : '';
+		$default = ! empty( $args['default'] ) ? $args['default'] : '';
+		$min = ! empty( $args['min'] ) ? $args['min'] : '';
+		$max = ! empty( $args['max'] ) ? $args['max'] : '';
+		?>
+		<input type="number" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" min="<?php echo esc_attr( $min ); ?>" max="<?php echo esc_attr( $max ); ?>" />
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
