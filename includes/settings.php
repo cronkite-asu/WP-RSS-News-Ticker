@@ -223,11 +223,39 @@ abstract class Settings {
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
 		?>
-		<input type="text" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" />
+		<input type="text" id="<?php echo esc_attr( $args['name'] ); ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" />
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $args['name'] ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<?php
+		}
+	}
+
+	/**
+	 * Render Textarea input
+	 *
+	 * @param $args
+	 * @return void
+	 */
+	public function render_textarea( $args ) {
+		$class = ! empty( $args['class'] ) ? $args['class'] : '';
+		$default = ! empty( $args['default'] ) ? $args['default'] : '';
+		$rows = $args['rows'] ?? '4';
+		$cols = $args['cols'] ?? '50';
+		?>
+		<textarea
+			type="text"
+			name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"
+			id="<?php echo esc_attr( $args['name'] ); ?>-textarea"
+			rows="<?php echo esc_attr( $rows ); ?>"
+			cols="<?php echo esc_attr( $cols ); ?>"
+			class="<?php echo esc_attr( $class ); ?>"><?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?></textarea>
+
+		<?php
+		if ( ! empty( $args['description'] ) ) {
+			?>
+			<p id="<?php echo esc_attr( $args['name'] ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 			<?php
 		}
 	}
@@ -244,11 +272,11 @@ abstract class Settings {
 		$min = ! empty( $args['min'] ) ? $args['min'] : '';
 		$max = ! empty( $args['max'] ) ? $args['max'] : '';
 		?>
-		<input type="number" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" min="<?php echo esc_attr( $min ); ?>" max="<?php echo esc_attr( $max ); ?>" />
+		<input type="number" id="<?php echo esc_attr( $args['name'] ); ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" min="<?php echo esc_attr( $min ); ?>" max="<?php echo esc_attr( $max ); ?>" />
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $args['name'] ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 			<?php
 		}
 	}
