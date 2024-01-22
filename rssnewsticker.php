@@ -139,18 +139,6 @@ class Rssnewsticker {
 	 */
 	public function enqueue_admin_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Rssnewsticker_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Rssnewsticker_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/rssnewsticker-admin.css', [], $this->version, 'all' );
 
 	}
@@ -161,18 +149,6 @@ class Rssnewsticker {
 	 * @since    1.0.0
 	 */
 	public function enqueue_admin_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Rssnewsticker_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Rssnewsticker_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/rssnewsticker-admin.js', [ 'jquery' ], $this->version, false );
 
@@ -185,18 +161,6 @@ class Rssnewsticker {
 	 */
 	public function enqueue_public_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Rssnewsticker_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Rssnewsticker_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/rssnewsticker-public.css', [], $this->version, 'all' );
 
 	}
@@ -207,18 +171,6 @@ class Rssnewsticker {
 	 * @since    1.0.0
 	 */
 	public function enqueue_public_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Rssnewsticker_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Rssnewsticker_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/rssnewsticker-public.js', [ 'jquery' ], $this->version, false );
 
