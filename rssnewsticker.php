@@ -229,7 +229,18 @@ class Rssnewsticker {
 	}
 
 	public function rss_callback() {
+		$schoolnews = $this->fetch_local_headlines();
+		$apnews = $this->fetch_ap_headlines();
+		$lines = array_merge($schoolnews, $apnews);
 		include(plugin_dir_path(__FILE__) . 'partials/rssnewsticker-public-display.php');
+	}
+
+	public function fetch_local_headlines() {
+		$text = $this->settings->get_option('school_news');
+
+		$lines = explode(PHP_EOL, $text);
+
+		return $lines;
 	}
 
 	public function fetch_ap_headlines() {

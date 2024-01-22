@@ -28,5 +28,25 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
+	$( window ).load(function() {
+		var $feedNameInput = $('#feed_name-input');
+		var $feedNameDescription = $('#feed_name-description');
+
+		updateLastText('feed_name-description',$feedNameInput.val());
+
+		$feedNameInput.on("change keyup paste", function() {
+			updateLastText('feed_name-description',$feedNameInput.val());
+		});
+	});
+
+	function updateLastText(id, text) {
+		const newtext = document.createTextNode(text);
+		const node = document.getElementById(id);
+		if (node.childNodes.length > 1) {
+			node.replaceChild(newtext,node.lastChild);
+		} else {
+			node.appendChild(newtext);
+		}
+	}
 
 })( jQuery );

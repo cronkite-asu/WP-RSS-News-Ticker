@@ -19,10 +19,10 @@ class SettingsPage extends Settings {
 	}
 
 	protected function define_fields() {
-		$this->fields['ap_config_section'] = [
-			'name' => 'ap_config_section',
-			'title' => 'AP Configuration',
-			'description' => 'Settings for AP News feed.',
+		$this->fields['feed_config_section'] = [
+			'name' => 'feed_config_section',
+			'title' => 'Feed Configuration',
+			'description' => 'Settings for the RSS feed.',
 			'type' => 'section'
 		];
 
@@ -30,10 +30,33 @@ class SettingsPage extends Settings {
 		$this->fields['feed_name'] = [
 			'name' => 'feed_name',
 			'title' => 'Feed Name',
-			'description' => 'Keep this name simple as it is used to forms your this feed URL. The feed will be available at ' . sprintf("%s<em>%s</em>", site_url('/feed/'), get_option('feed_name')),
+			'description' => 'Keep this name simple as it is used to forms your this feed URL. The feed will be available at ' . site_url('/feed/'),
 			'type' => 'text',
 			'default' => 'ticker',
-			'section' => 'ap_config_section'
+			'section' => 'feed_config_section'
+		];
+
+		$this->fields['local_config_section'] = [
+			'name' => 'local_config_section',
+			'title' => 'Local Feed Configuration',
+			'description' => 'Settings for the local feed.',
+			'type' => 'section'
+		];
+
+
+		$this->fields['school_news'] = [
+			'name' => 'school_news',
+			'title' => 'School News',
+			'description' => 'News from the school to display on in the feed. ',
+			'type' => 'textarea',
+			'section' => 'local_config_section'
+		];
+
+		$this->fields['ap_config_section'] = [
+			'name' => 'ap_config_section',
+			'title' => 'AP Configuration',
+			'description' => 'Settings for AP News feed.',
+			'type' => 'section'
 		];
 
 		$this->fields['ap_productid'] = [
