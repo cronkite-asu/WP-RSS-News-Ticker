@@ -225,14 +225,39 @@ class Rssnewsticker {
 	}
 
 	public function add_rss_feed() {
-		add_feed($this->settings->get_option('feed_name'), array( $this, 'rss_callback' ));
+		add_feed($this->settings->get_option('feed_name'), array( $this, 'render_rss_feed' ));
 	}
 
-	public function rss_callback() {
+	public function render_rss_feed () {
 		$schoolnews = $this->fetch_local_headlines();
 		$apnews = $this->fetch_ap_headlines();
 		$lines = array_merge($schoolnews, $apnews);
-		include(plugin_dir_path(__FILE__) . 'partials/rssnewsticker-public-display.php');
+
+		define('DONOTCACHEPAGE', true);
+		header('Content-Type: application/rss+xml');
+		echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.">";
+		do_action('rss_tag_pre', 'rss2');
+?>
+
+<rss version="2.0" <?php do_action('rss2_ns'); ?>>
+	<channel>
+		<title><?php bloginfo_rss('name'); ?> - Ticker Feed</title>
+		<link><?php bloginfo_rss('url') ?></link>
+		<description><?php bloginfo_rss('description') ?></description>
+<?php		do_action('rss2_head'); ?>
+
+<?php
+		foreach ($lines as $line) {
+			$line = sanitize_text_field($line);
+?>
+		<item>
+			<description><![CDATA[<?php echo wp_filter_nohtml_kses($line) ?>]]></description>
+<?php			do_action('rss2_item'); ?>
+		</item>
+<?php		}; ?>
+	</channel>
+</rss>
+<?php
 	}
 
 	public function fetch_local_headlines() {
