@@ -100,7 +100,6 @@ abstract class Settings {
 		$this->fields = array_merge( $this->fields, $field );
 	}
 
-
 	/**
 	 * Get Settings Fields.
 	 *
@@ -147,6 +146,7 @@ abstract class Settings {
 			}
 		}
 	}
+
 	public function sanitize( $input ) {
 		$fields = $this->get_fields();
 
