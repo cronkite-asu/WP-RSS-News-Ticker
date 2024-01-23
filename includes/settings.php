@@ -164,6 +164,15 @@ abstract class Settings {
 				case 'text':
 					$input[ $field['name'] ] = sanitize_text_field( $input[ $field['name'] ] );
 					break;
+				case 'textarea':
+					$input[ $field['name'] ] = sanitize_textarea_field( $input[ $field['name'] ] );
+					break;
+				case 'select':
+					$input[ $field['name'] ] = $this->sanitize_select_field( $input[ $field['name'] ] );
+					break;
+				case 'checkbox':
+					$input[ $field['name'] ] = $this->sanitize_checkbox_field( $input[ $field['name'] ] );
+					break;
 			}
 		}
 
@@ -172,6 +181,22 @@ abstract class Settings {
 		return $input;
 	}
 
+	/**
+	 * Sanitizes the checkbox field.
+	 */
+	protected function sanitize_checkbox_field( $value = '', $field_args = [] ) {
+		return ( 'on' === $value ) ? 1 : 0;
+	}
+
+	/**
+	 * Sanitizes the select field.
+	 */
+	protected function sanitize_select_field( $value = '', $field_args = [] ) {
+		$choices = $field_args['choices'] ?? [];
+		if ( array_key_exists( $value, $choices ) ) {
+			return $value;
+		}
+	}
 
 	/**
 	 * Get option key. Useful for name attributes in forms.
@@ -273,6 +298,49 @@ abstract class Settings {
 		$max = ! empty( $args['max'] ) ? $args['max'] : '';
 		?>
 		<input type="number" id="<?php echo esc_attr( $args['name'] ); ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" min="<?php echo esc_attr( $min ); ?>" max="<?php echo esc_attr( $max ); ?>" />
+		<?php
+		if ( ! empty( $args['description'] ) ) {
+			?>
+			<p id="<?php echo esc_attr( $args['name'] ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<?php
+		}
+	}
+
+	/**
+	 * Render checkbox input
+	 *
+	 * @param $args
+	 * @return void
+	 */
+	public function render_checkbox( $args ) {
+		$class = ! empty( $args['class'] ) ? $args['class'] : '';
+		$default = ! empty( $args['default'] ) ? $args['default'] : '';
+		?>
+		<input type="checkbox" id="<?php echo esc_attr( $args['name'] ); ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" <?php checked( $this->get_option( $args['name'], $default ), 1, true ); ?> />
+		<?php
+		if ( ! empty( $args['description'] ) ) {
+			?>
+			<p id="<?php echo esc_attr( $args['name'] ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<?php
+		}
+	}
+
+	/**
+	 * Render select input
+	 *
+	 * @param $args
+	 * @return void
+	 */
+	public function render_select( $args ) {
+		$class = ! empty( $args['class'] ) ? $args['class'] : '';
+		$default = ! empty( $args['default'] ) ? $args['default'] : '';
+		$choices = ! empty( $args['choices'] ) ? $args['choices'] : [];
+		?>
+		<select id="<?php echo esc_attr( $args['name'] ); ?>-select" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" min="<?php echo esc_attr( $min ); ?>" max="<?php echo esc_attr( $max ); ?>" />
+		<?php foreach ( $choices as $choice_v => $label ) { ?>
+			<option value="<?php echo esc_attr( $choice_v ); ?>" <?php selected( $choice_v, $value, true ); ?>><?php echo esc_html( $label ); ?></option>
+		<?php } ?>
+		</select>
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
