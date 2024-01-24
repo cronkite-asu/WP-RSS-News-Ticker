@@ -17,7 +17,9 @@
 
 namespace Rssnewsticker;
 include_once 'includes/settings.php';
+include_once 'includes/settings-meta-box.php';
 include_once 'includes/settings-page.php';
+include_once 'includes/settings-ticker.php';
 include_once 'includes/remote.php';
 include_once 'includes/remote_json.php';
 include_once 'includes/remote_ap_headlines.php';
@@ -62,6 +64,18 @@ class Rssnewsticker {
 	protected $settings;
 
 	/**
+	 * Settings
+	 * @var [type]
+	 */
+	protected $page;
+
+	/**
+	 * Settings
+	 * @var [type]
+	 */
+	protected $metabox;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -78,6 +92,7 @@ class Rssnewsticker {
 		}
 		$this->plugin_name = 'rssnewsticker';
 		$this->settings = new SettingsPage();
+		$this->metabox = new SettingsTicker();
 
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
@@ -150,7 +165,7 @@ class Rssnewsticker {
 	 */
 	public function enqueue_admin_scripts() {
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/rssnewsticker-admin.js', [ 'jquery' ], $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/rssnewsticker-admin.js', [ 'jquery', 'wp-util' ], $this->version, true );
 
 	}
 
@@ -172,7 +187,7 @@ class Rssnewsticker {
 	 */
 	public function enqueue_public_scripts() {
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/rssnewsticker-public.js', [ 'jquery' ], $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/rssnewsticker-public.js', [ 'jquery' ], $this->version, true );
 
 	}
 
