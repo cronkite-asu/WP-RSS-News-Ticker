@@ -15,6 +15,7 @@ class SettingsPage extends Settings {
 
 		$this->define_fields();
 
+
 		parent::__construct();
 	}
 
@@ -97,4 +98,54 @@ class SettingsPage extends Settings {
 			'section' => 'ap_config_section'
 		];
 	}
+
+	/**
+	 * Load Script Needed For Meta Box
+	 * @since 0.1.0
+	 */
+	public function enqueue_scripts( $hook_suffix ){
+		$page_hook_id = $this->get_hook_suffix_id();
+		add_action( "admin_footer-{$page_hook_id}", [ $this, 'footer_scripts' ] );
+	}
+
+	/**
+	 * Footer Script Needed for Meta Box:
+	 * - Meta Box Toggle.
+	 * - Spinner for Saving Option.
+	 * - Reset Settings Confirmation
+	 * @since 0.1.0
+	 */
+	public function footer_scripts(){
+	?>
+	<script type="text/javascript">
+		//<![CDATA[
+		jQuery(document).ready( function($) {
+			var $feedNameInput = $('#feed_name-input');
+
+			updateLastText('feed_name-description',$feedNameInput.val());
+
+			$feedNameInput.on("change keyup paste", function() {
+				updateLastText('feed_name-description',$feedNameInput.val());
+			});
+		});
+
+		function updateLastText(id, text) {
+			const node = document.getElementById(id);
+
+			if (JSON.stringify(node) == "null") {
+				return;
+			}
+
+			const newtext = document.createTextNode(text);
+
+			if (node.childNodes.length > 1) {
+				node.replaceChild(newtext,node.lastChild);
+			} else {
+				node.appendChild(newtext);
+			}
+		}
+	//]]>
+</script>
+<?php
+}
 }
