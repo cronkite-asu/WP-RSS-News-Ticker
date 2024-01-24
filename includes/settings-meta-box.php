@@ -34,20 +34,20 @@ class SettingsMetaBox extends Settings {
 
 		/* Register our setting. */
 		register_setting(
-			$this->id . '_settings_page',						  /* Option Group */
-			$this->id . '_options',					  /* Option Name */
-			[ $this, 'basic_sanitize' ]			 /* Sanitize Callback */
+			$this->id . '_settings_page',	/* Option Group */
+			$this->id . '_options',		/* Option Name */
+			[ $this, 'basic_sanitize' ]	/* Sanitize Callback */
 		);
 
 		/* Add settings menu page */
 		$settings_page = add_menu_page(
-			$this->page_title, /* Page Title */
-			$this->menu_title ?: $this->page_title,						  /* Menu Title */
-			'manage_options',				  /* Capability */
-			$this->id . '_settings_page',						  /* Page Slug */
-			[ $this, 'settings_page' ],			  /* Settings Page Function Callback */
-			$this->icon_url,		   /* Menu Icon */
-			$this->position			   /* Menu Position */
+			$this->page_title,			/* Page Title */
+			$this->menu_title ?: $this->page_title,	/* Menu Title */
+			'manage_options',			/* Capability */
+			$this->id . '_settings_page',		/* Page Slug */
+			[ $this, 'settings_page' ],		/* Settings Page Function Callback */
+			$this->icon_url,		   	/* Menu Icon */
+			$this->position				/* Menu Position */
 		);
 
 		/* Vars */
@@ -211,12 +211,12 @@ class SettingsMetaBox extends Settings {
 		$page_hook_id = $this->get_hook_suffix_id();
 
 		add_meta_box(
-			'submitdiv',			   /* Meta Box ID */
-			'Save Options',			   /* Title */
-			[ $this, 'submit_meta_box' ],  /* Function Callback */
-			$page_hook_id,				  /* Screen: Our Settings Page */
-			'side',					   /* Context */
-			'high'					   /* Priority */
+			'submitdiv',			/* Meta Box ID */
+			'Save Options',			/* Title */
+			[ $this, 'submit_meta_box' ],	/* Function Callback */
+			$page_hook_id,			/* Screen: Our Settings Page */
+			'side',				/* Context */
+			'high'				/* Priority */
 		);
 	}
 
@@ -325,12 +325,12 @@ class SettingsMetaBox extends Settings {
 		$page_hook_id = $this->get_hook_suffix_id();
 
 		add_meta_box(
-			'basic',				  /* Meta Box ID */
-			'Meta Box',				  /* Title */
-			[ $this, 'basic_meta_box' ],  /* Function Callback */
-			$page_hook_id,				 /* Screen: Our Settings Page */
-			'normal',				  /* Context */
-			'default'				  /* Priority */
+			'basic',			/* Meta Box ID */
+			'Meta Box',			/* Title */
+			[ $this, 'basic_meta_box' ],	/* Function Callback */
+			$page_hook_id,			/* Screen: Our Settings Page */
+			'normal',			/* Context */
+			'default'			/* Priority */
 		);
 	}
 
