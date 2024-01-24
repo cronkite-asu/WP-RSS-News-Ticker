@@ -30,6 +30,16 @@ abstract class Settings {
 	protected $parent_menu = '';
 
 	/**
+	 * @var string
+	 */
+	protected $icon_url = '';
+
+	/**
+	 * @var int
+	 */
+	protected $position = null;
+
+	/**
 	 * Settings Fields.
 	 * @var array
 	 */
@@ -56,7 +66,9 @@ abstract class Settings {
 				$this->menu_title ?: $this->page_title,
 				'manage_options',
 				$this->id . '_settings_page',
-				[ $this, 'render_page']
+				[ $this, 'render_page'],
+				$this->icon_url,
+				$this->position
 			);
 		}
 	}
