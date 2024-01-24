@@ -71,6 +71,7 @@ abstract class Settings {
 				$this->position
 			);
 		}
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 	}
 
 	public function render_page() {
@@ -108,9 +109,27 @@ abstract class Settings {
 		return $this->id;
 	}
 
+	/**
+	 * Utility: Page Hook
+	 * The Settings Page Hook, it's the same with global $hook_suffix.
+	 * @since 0.1.0
+	 */
+	public function get_hook_suffix_id(){
+		if ( is_admin() ) {
+			$hook_suffix = get_current_screen()->id;
+			return $hook_suffix;
+		}
+	}
+
 	public function add_field( $field ) {
 		$this->fields = array_merge( $this->fields, $field );
 	}
+
+	/**
+	 * Load Script Needed For Meta Box
+	 * @since 0.1.0
+	 */
+	public function enqueue_scripts( $hook_suffix ) {}
 
 	/**
 	 * Get Settings Fields.
