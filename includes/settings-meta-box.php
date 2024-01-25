@@ -20,7 +20,7 @@ class SettingsMetaBox extends Settings {
 		add_action( 'settings_page_init', [ $this, 'reset_settings' ] );
 
 		/* Add Meta Box */
-		add_action( 'add_meta_boxes', [ $this, 'basic_add_meta_box' ] );
+		add_action( 'add_meta_boxes', [ $this, 'repeater_meta_box' ] );
 	}
 
 	/**
@@ -35,8 +35,8 @@ class SettingsMetaBox extends Settings {
 		/* Register our setting. */
 		register_setting(
 			$this->id . '_settings_page',	/* Option Group */
-			$this->id . '_options',		/* Option Name */
-			[ $this, 'basic_sanitize' ]	/* Sanitize Callback */
+			$this->id . '_option',		/* Option Name */
+			[ $this, 'repeater_sanitize' ]	/* Sanitize Callback */
 		);
 
 		/* Add settings menu page */
@@ -75,6 +75,7 @@ class SettingsMetaBox extends Settings {
 		if ( $hook_suffix == $page_hook_id ){
 			wp_enqueue_script( 'common' );
 			wp_enqueue_script( 'wp-lists' );
+			wp_enqueue_script( 'wp-util' );
 			wp_enqueue_script( 'postbox' );
 		}
 	}
@@ -89,9 +90,16 @@ class SettingsMetaBox extends Settings {
 	public function footer_scripts(){
 		$page_hook_id = $this->get_hook_suffix();
 	?>
+	<script type="text/html" id="tmpl-repeater">
+		<div class="field-group">
+			<input type="text" name="<?php echo esc_attr( $this->id . '_option' ); ?>[]" value="" />
+			<button type="button" class="button button-secondary field-data-remove">X</button>
+		</div>
+	</script>
 	<script type="text/javascript">
 		//<![CDATA[
 		jQuery(document).ready( function($) {
+			'use strict';
 			// toggle
 			$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 			postboxes.add_postbox_toggles( '<?php echo $page_hook_id; ?>' );
@@ -103,6 +111,18 @@ class SettingsMetaBox extends Settings {
 			$('#delete-action .submitdelete').on('click', function() {
 				return confirm('Are you sure want to do this?');
 			});
+			$(function(){
+				$("#field_data_add").on( 'click', function(e){
+					e.preventDefault();
+					var template = wp.template('repeater'),
+						html = template();
+					$("#field_data").append( html );
+				});
+				$( document ).on( 'click', '.field-data-remove', function(e){
+					e.preventDefault();
+					$(this).parent().remove();
+				});
+			}
 		});
 		//]]>
 	</script>
@@ -316,7 +336,7 @@ class SettingsMetaBox extends Settings {
 		$page_hook_id = $this->get_hook_suffix();
 
 		add_meta_box(
-			$this->id . '_options',		/* Meta Box ID */
+			$this->id . '_option',		/* Meta Box ID */
 			'Meta Box',			/* Title */
 			[ $this, 'basic_meta_box' ],	/* Function Callback */
 			$page_hook_id,			/* Screen: Our Settings Page */
@@ -334,9 +354,9 @@ class SettingsMetaBox extends Settings {
 	<?php /* Simple Text Input Example */ ?>
 	<p>
 		<label for="basic-text">Basic Text Input</label>
-		<input id="basic-text" class="widefat" type="text" name=<?php echo esc_attr( $this->id . '_options' ); ?> value="<?php echo sanitize_text_field( get_option( $this->id . '_options', '' ) );?>">
+		<input id="basic-text" class="widefat" type="text" name=<?php echo esc_attr( $this->id . '_option' ); ?> value="<?php echo sanitize_text_field( get_option( $this->id . '_option', '' ) );?>">
 	</p>
-	<p class="howto">To display this option use PHP code <code>get_option( <?php echo esc_attr( $this->id . '_options' ); ?> );</code>.</p>
+	<p class="howto">To display this option use PHP code <code>get_option( <?php echo esc_attr( $this->id . '_option' ); ?> );</code>.</p>
 	<?php
 	}
 
@@ -350,4 +370,62 @@ class SettingsMetaBox extends Settings {
 		return $settings ;
 	}
 
+	/* === EXAMPLE REPEATER META BOX === */
+
+
+	/**
+	 * Repeater Meta Box
+	 * @since 0.1.0
+	 * @link http://codex.wordpress.org/Function_Reference/add_meta_box
+	 */
+	public function repeater_add_meta_box(){
+
+		$page_hook_id = $this->get_hook_suffix();
+
+		add_meta_box(
+			$this->id . '_option',		/* Meta Box ID */
+			'Repeater Meta Box',		/* Title */
+			[ $this, 'repeater_meta_box' ],	/* Function Callback */
+			$page_hook_id,			/* Screen: Our Settings Page */
+			'normal',			/* Context */
+			'default'			/* Priority */
+		);
+	}
+
+	/**
+	 * Submit Repeater Meta Box Callback
+	 * u
+	 * @since 0.1.0
+	 */
+	public function repeater_meta_box(){
+
+		$field_data = $this->get_option( $this->id, [""] );
+	?>
+	<?php /* Simple Text Input Example */ ?>
+
+		<label for="field_data">
+			<strong><?php _e( 'Field Name', 'yourtextdomain' ); ?></strong>
+		</label>
+		<div id="field_data">
+			<?php foreach( $field_data as $field ) { ?>
+			<div class="field-group">
+				<input type="text" name="<?php echo esc_attr( $this->id . '_option' ); ?>[]" value="<?php echo $field; ?>" />
+				<button type="button" class="button button-secondary field-data-remove">X</button>
+			</div>
+			<?php } ?>
+		</div>
+		<button type="button" id="field_data_add" class="button button-primary">Add</button>
+
+	<?php
+	}
+
+	/**
+	 * Sanitize Repeater Settings
+	 * This function is defined in register_setting().
+	 * @since 0.1.0
+	 */
+	public function repeater_sanitize( $settings  ){
+		$settings = map_deep( $settings, 'sanitize_text_field' );
+		return $settings ;
+	}
 }
