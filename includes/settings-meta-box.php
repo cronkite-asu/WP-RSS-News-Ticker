@@ -10,11 +10,8 @@ class SettingsMetaBox extends Settings {
 
 
 	public function __construct() {
-		/* Add Meta Box */
-		add_action( 'add_meta_boxes', [ $this, 'submit_add_meta_box' ] );
-
-		/* Reset Settings */
-		add_action( 'settings_page_init', [ $this, 'reset_settings' ] );
+		/* Pre Settings */
+		add_action( $this->id . '_settings_before_options', [ $this, 'settings_before_options' ] );
 
 		/* Add Meta Box */
 		add_action( 'add_meta_boxes', [ $this, 'repeater_meta_box' ] );
@@ -63,7 +60,7 @@ class SettingsMetaBox extends Settings {
 			$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 			postboxes.add_postbox_toggles( '<?php echo $page_hook_id; ?>' );
 			// display spinner
-			$('#' . $this->id . '-form').submit( function(){
+			$('<?php echo esc_attr( '#' . $this->id . '-form' ); ?>').submit( function(){
 				$('#publishing-action .spinner').addClass(‘is-active’);
 			});
 			// confirm before reset
@@ -106,7 +103,7 @@ class SettingsMetaBox extends Settings {
 	 * used in register_fields().
 	 * @since 0.1.0
 	 */
-	public function render_page(){
+	public function settings_before_options(){
 
 		/* global vars */
 		global $hook_suffix;
@@ -118,53 +115,41 @@ class SettingsMetaBox extends Settings {
 		do_action( 'add_meta_boxes', $hook_suffix );
 		?>
 
-		<div class="wrap">
+		<?php settings_errors(); ?>
 
-			<div id="icon-options-general" class="icon32"><br></div>
-			<h2><?php echo $this->page_title; ?></h2>
+		<div class="<?php echo esc_attr( $this->id ); ?>">
 
-			<?php settings_errors(); ?>
+				<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
+				<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 
-			<div class="<?php echo esc_attr( $this->id ); ?>">
+				<div id="poststuff">
 
-				<form id="<?php echo esc_attr( $this->id ); ?>-form" method="post" action="options.php">
+					<div id="post-body" class="metabox-holder columns-<?php echo 1 == get_current_screen()->get_columns() ? '1' : '2'; ?>">
 
-					<?php settings_fields( $this->id . '_settings_page' ); // options group	 ?>
-					<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-					<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
+						<div id="postbox-container-1" class="postbox-container">
 
-					<div id="poststuff">
+							<?php do_meta_boxes( $hook_suffix, 'side', null ); ?>
+							<!-- #side-sortables -->
 
-						<div id="post-body" class="metabox-holder columns-<?php echo 1 == get_current_screen()->get_columns() ? '1' : '2'; ?>">
+						</div><!-- #postbox-container-1 -->
 
-							<div id="postbox-container-1" class="postbox-container">
+						<div id="postbox-container-2" class="postbox-container">
 
-								<?php do_meta_boxes( $hook_suffix, 'side', null ); ?>
-								<!-- #side-sortables -->
+							<?php do_meta_boxes( $hook_suffix, 'normal', null ); ?>
+							<!-- #normal-sortables -->
 
-							</div><!-- #postbox-container-1 -->
+							<?php do_meta_boxes( $hook_suffix, 'advanced', null ); ?>
+							<!-- #advanced-sortables -->
 
-							<div id="postbox-container-2" class="postbox-container">
+						</div><!-- #postbox-container-2 -->
 
-								<?php do_meta_boxes( $hook_suffix, 'normal', null ); ?>
-								<!-- #normal-sortables -->
+					</div><!-- #post-body -->
 
-								<?php do_meta_boxes( $hook_suffix, 'advanced', null ); ?>
-								<!-- #advanced-sortables -->
+					<br class="clear">
 
-							</div><!-- #postbox-container-2 -->
+				</div><!-- #poststuff -->
 
-						</div><!-- #post-body -->
-
-						<br class="clear">
-
-					</div><!-- #poststuff -->
-
-				</form>
-
-			</div><!-- .<?php echo esc_attr( $this->id ); ?> -->
-
-		</div><!-- .wrap -->
+		</div><!-- .<?php echo esc_attr( $this->id ); ?> -->
 		<?php
 	}
 
@@ -359,7 +344,8 @@ class SettingsMetaBox extends Settings {
 	 */
 	public function repeater_meta_box(){
 
-		$field_data = $this->get_option( $this->id, [""] );
+		$name = 'ticker_text';
+		$field_data = $this->get_option( $name, [""] );
 	?>
 	<?php /* Simple Text Input Example */ ?>
 
@@ -367,9 +353,9 @@ class SettingsMetaBox extends Settings {
 			<strong><?php _e( 'Field Name', 'yourtextdomain' ); ?></strong>
 		</label>
 		<div id="field_data">
-			<?php foreach( $field_data as $field ) { ?>
+			<?php foreach( $field_data as $i => $value ) { ?>
 			<div class="field-group">
-				<input type="text" name="<?php echo esc_attr( $this->id . '_option' ); ?>[]" value="<?php echo $field; ?>" />
+				<input type="text" id="<?php echo esc_attr( $name ); ?>-<?php echo $i; ?>-input" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>[<?php echo $i; ?>]" value="<?php echo $value; ?>" />
 				<button type="button" class="button button-secondary field-data-remove">X</button>
 			</div>
 			<?php } ?>
@@ -385,17 +371,7 @@ class SettingsMetaBox extends Settings {
 	 * @param $args
 	 * @return void
 	 */
-	public function render_repeater( $args ) {
+	public function render_array( $args ) {
 		return;
-	}
-
-	/**
-	 * Sanitize Repeater Settings
-	 * This function is defined in register_setting().
-	 * @since 0.1.0
-	 */
-	public function sanitize_repeater_field( $settings  ){
-		$settings = map_deep( $settings, 'sanitize_text_field' );
-		return $settings ;
 	}
 }
