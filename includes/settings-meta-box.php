@@ -14,7 +14,7 @@ class SettingsMetaBox extends Settings {
 		add_action( $this->id . '_settings_before_options', [ $this, 'settings_before_options' ] );
 
 		/* Add Meta Box */
-		add_action( 'add_meta_boxes', [ $this, 'repeater_meta_box' ] );
+		add_action( 'add_meta_boxes', [ $this, 'repeater_add_meta_box' ] );
 
 		parent::__construct();
 	}
@@ -45,10 +45,11 @@ class SettingsMetaBox extends Settings {
 	 */
 	public function footer_scripts(){
 		$page_hook_id = $this->get_hook_suffix();
+		$name = 'ticker_text';
 	?>
 	<script type="text/html" id="tmpl-repeater">
 		<div class="field-group">
-			<input type="text" name="<?php echo esc_attr( $this->id . '_option' ); ?>[]" value="" />
+			<input type="text" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>[]" value="" />
 			<button type="button" class="button button-secondary field-data-remove">X</button>
 		</div>
 	</script>
@@ -78,7 +79,7 @@ class SettingsMetaBox extends Settings {
 					e.preventDefault();
 					$(this).parent().remove();
 				});
-			}
+			});
 		});
 		//]]>
 	</script>
@@ -339,15 +340,17 @@ class SettingsMetaBox extends Settings {
 
 	/**
 	 * Submit Repeater Meta Box Callback
-	 * u
 	 * @since 0.1.0
 	 */
 	public function repeater_meta_box(){
 
 		$name = 'ticker_text';
+		$class = ! empty( $args['class'] ) ? $args['class'] : '';
+		$default = ! empty( $args['default'] ) ? $args['default'] : [""];
 		$field_data = $this->get_option( $name, [""] );
-	?>
-	<?php /* Simple Text Input Example */ ?>
+
+		/* Repeater Text Input */
+		?>
 
 		<label for="field_data">
 			<strong><?php _e( 'Field Name', 'yourtextdomain' ); ?></strong>
@@ -355,8 +358,8 @@ class SettingsMetaBox extends Settings {
 		<div id="field_data">
 			<?php foreach( $field_data as $i => $value ) { ?>
 			<div class="field-group">
-				<input type="text" id="<?php echo esc_attr( $name ); ?>-<?php echo $i; ?>-input" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>[<?php echo $i; ?>]" value="<?php echo $value; ?>" />
-				<button type="button" class="button button-secondary field-data-remove">X</button>
+				<input type="text" id="<?php echo esc_attr( $name ); ?>-<?php echo $i; ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>[<?php echo $i; ?>]" value="<?php echo $value; ?>" />
+				<?php if ( $i != 0 ) { ?><button type="button" class="button button-secondary field-data-remove">X</button><?php } ?>
 			</div>
 			<?php } ?>
 		</div>
