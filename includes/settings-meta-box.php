@@ -23,45 +23,6 @@ class SettingsMetaBox extends Settings {
 	}
 
 	/**
-	 * Create Settings Page
-	 * @since 0.1.0
-	 * @link http://codex.wordpress.org/Function_Reference/register_setting
-	 * @link http://codex.wordpress.org/Function_Reference/add_menu_page
-	 * @uses get_hook_suffix()
-	 */
-	public function settings_setup(){
-
-		/* Register our setting. */
-		register_setting(
-			$this->id . '_settings_page',		/* Option Group */
-			$this->id . '_option',			/* Option Name */
-			[ $this, 'sanitize_repeater_field' ]	/* Sanitize Callback */
-		);
-
-		/* Add settings menu page */
-		$settings_page = add_menu_page(
-			$this->page_title,			/* Page Title */
-			$this->menu_title ?: $this->page_title,	/* Menu Title */
-			'manage_options',			/* Capability */
-			$this->id . '_settings_page',		/* Page Slug */
-			[ $this, 'render_page' ],		/* Settings Page Function Callback */
-			$this->icon_url,		   	/* Menu Icon */
-			$this->position				/* Menu Position */
-		);
-
-		/* Vars */
-		$page_hook_id = $this->get_hook_suffix();
-
-		/* Do stuff in settings page, such as adding scripts, etc. */
-		if ( !empty( $settings_page ) ) {
-
-			/* Load the JavaScript needed for the settings screen. */
-			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
-
-		}
-	}
-
-	/**
 	 * Load Script Needed For Meta Box
 	 * @since 0.1.0
 	 */
