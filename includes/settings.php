@@ -216,6 +216,9 @@ abstract class Settings {
 				case 'checkbox':
 					$input[ $field['name'] ] = $this->sanitize_checkbox_field( $input[ $field['name'] ] );
 					break;
+				case 'array':
+					$input[ $field['name'] ] = $this->sanitize_array_field( $input[ $field['name'] ] );
+					break;
 			}
 		}
 
@@ -239,6 +242,14 @@ abstract class Settings {
 		if ( array_key_exists( $value, $choices ) ) {
 			return $value;
 		}
+	}
+
+	/**
+	 * Sanitizes the array field.
+	 */
+	protected function sanitize_array_field( $values = [], $field_args = [] ) {
+		$values = map_deep( $settings, 'sanitize_text_field' );
+		return $values;
 	}
 
 	/**
