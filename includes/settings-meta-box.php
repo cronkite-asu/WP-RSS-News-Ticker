@@ -61,7 +61,7 @@ class SettingsMetaBox extends Settings {
 			postboxes.add_postbox_toggles( '<?php echo $page_hook_id; ?>' );
 			// display spinner
 			$('<?php echo esc_attr( '#' . $this->id . '-form' ); ?>').submit( function(){
-				$('#publishing-action .spinner').addClass(‘is-active’);
+				$('#publishing-action .spinner').addClass('is-active');
 			});
 			// confirm before reset
 			$('#delete-action .submitdelete').on('click', function() {
