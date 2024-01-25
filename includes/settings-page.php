@@ -104,7 +104,7 @@ class SettingsPage extends Settings {
 	 * @since 0.1.0
 	 */
 	public function enqueue_scripts( $hook_suffix ){
-		$page_hook_id = $this->get_hook_suffix_id();
+		$page_hook_id = $this->get_hook_suffix();
 		add_action( "admin_footer-{$page_hook_id}", [ $this, 'footer_scripts' ] );
 	}
 
