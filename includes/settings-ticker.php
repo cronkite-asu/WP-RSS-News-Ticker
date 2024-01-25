@@ -36,7 +36,7 @@ class SettingsTicker extends SettingsMetaBox {
 			'name' => 'ticker_text',
 			'title' => 'Ticker Text',
 			'description' => 'Custom text to display on the news ticker.',
-			'type' => 'repeater',
+			'type' => 'array',
 			'section' => 'ticker_config_section'
 		];
 	}
