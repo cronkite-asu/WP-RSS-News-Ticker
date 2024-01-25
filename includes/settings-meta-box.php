@@ -28,7 +28,7 @@ class SettingsMetaBox extends Settings {
 	 * @since 0.1.0
 	 * @link http://codex.wordpress.org/Function_Reference/register_setting
 	 * @link http://codex.wordpress.org/Function_Reference/add_menu_page
-	 * @uses get_hook_suffix_id()
+	 * @uses get_hook_suffix()
 	 */
 	public function settings_setup(){
 
@@ -51,7 +51,7 @@ class SettingsMetaBox extends Settings {
 		);
 
 		/* Vars */
-		$page_hook_id = $this->get_hook_suffix_id();
+		$page_hook_id = $this->get_hook_suffix();
 
 		/* Do stuff in settings page, such as adding scripts, etc. */
 		if ( !empty( $settings_page ) ) {
@@ -67,20 +67,11 @@ class SettingsMetaBox extends Settings {
 	}
 
 	/**
-	 * Utility: Page Hook
-	 * The Settings Page Hook, it's the same with global $hook_suffix.
-	 * @since 0.1.0
-	 */
-	public function settings_page_id(){
-		return 'toplevel_page' . $this->id;
-	}
-
-	/**
 	 * Load Script Needed For Meta Box
 	 * @since 0.1.0
 	 */
 	public function enqueue_scripts( $hook_suffix ){
-		$page_hook_id = $this->get_hook_suffix_id();
+		$page_hook_id = $this->get_hook_suffix();
 		if ( $hook_suffix == $page_hook_id ){
 			wp_enqueue_script( 'common' );
 			wp_enqueue_script( 'wp-lists' );
@@ -96,7 +87,7 @@ class SettingsMetaBox extends Settings {
 	 * @since 0.1.0
 	 */
 	public function footer_scripts(){
-		$page_hook_id = $this->get_hook_suffix_id();
+		$page_hook_id = $this->get_hook_suffix();
 	?>
 	<script type="text/javascript">
 		//<![CDATA[
@@ -124,7 +115,7 @@ class SettingsMetaBox extends Settings {
 	 * @since 0.1.0
 	 */
 	public function screen_layout_column( $columns, $screen ){
-		$page_hook_id = $this->get_hook_suffix_id();
+		$page_hook_id = $this->get_hook_suffix();
 		if ( $screen == $page_hook_id ){
 			$columns[$page_hook_id] = 2;
 		}
@@ -154,7 +145,7 @@ class SettingsMetaBox extends Settings {
 
 			<?php settings_errors(); ?>
 
-			<div class="fx-settings-meta-box-wrap">
+			<div class="<?php echo esc_attr( $this->id ); ?>">
 
 				<form id="<?php echo esc_attr( $this->id ); ?>-form" method="post" action="options.php">
 
@@ -191,7 +182,7 @@ class SettingsMetaBox extends Settings {
 
 				</form>
 
-			</div><!-- .fx-settings-meta-box-wrap -->
+			</div><!-- .<?php echo esc_attr( $this->id ); ?> -->
 
 		</div><!-- .wrap -->
 		<?php
@@ -208,7 +199,7 @@ class SettingsMetaBox extends Settings {
 	 */
 	public function submit_add_meta_box(){
 
-		$page_hook_id = $this->get_hook_suffix_id();
+		$page_hook_id = $this->get_hook_suffix();
 
 		add_meta_box(
 			'submitdiv',			/* Meta Box ID */
@@ -322,10 +313,10 @@ class SettingsMetaBox extends Settings {
 	 */
 	public function basic_add_meta_box(){
 
-		$page_hook_id = $this->get_hook_suffix_id();
+		$page_hook_id = $this->get_hook_suffix();
 
 		add_meta_box(
-			'basic',			/* Meta Box ID */
+			$this->id . '_options',		/* Meta Box ID */
 			'Meta Box',			/* Title */
 			[ $this, 'basic_meta_box' ],	/* Function Callback */
 			$page_hook_id,			/* Screen: Our Settings Page */
@@ -343,9 +334,9 @@ class SettingsMetaBox extends Settings {
 	<?php /* Simple Text Input Example */ ?>
 	<p>
 		<label for="basic-text">Basic Text Input</label>
-		<input id="basic-text" class="widefat" type="text" name="basic" value="<?php echo sanitize_text_field( get_option( 'basic', '' ) );?>">
+		<input id="basic-text" class="widefat" type="text" name=<?php echo esc_attr( $this->id . '_options' ); ?> value="<?php echo sanitize_text_field( get_option( $this->id . '_options', '' ) );?>">
 	</p>
-	<p class="howto">To display this option use PHP code <code>get_option( 'basic' );</code>.</p>
+	<p class="howto">To display this option use PHP code <code>get_option( <?php echo esc_attr( $this->id . '_options' ); ?> );</code>.</p>
 	<?php
 	}
 
