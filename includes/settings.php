@@ -45,6 +45,12 @@ abstract class Settings {
 	 */
 	protected $fields = [];
 
+	/**
+	 * Setting Hook Suffix.
+	 * @var string
+	 */
+	protected $hook_suffix = '';
+
 	public function __construct() {
 		add_action( 'admin_menu', [ $this, 'register_page' ] );
 		add_action( 'admin_init', [ $this, 'register_fields' ] );
@@ -52,7 +58,7 @@ abstract class Settings {
 
 	public function register_page() {
 		if ( $this->parent_menu ) {
-			add_submenu_page(
+			$menu = add_submenu_page(
 				$this->parent_menu,
 				$this->page_title,
 				$this->menu_title ?: $this->page_title,
@@ -61,7 +67,7 @@ abstract class Settings {
 				[ $this, 'render_page']
 			);
 		} else {
-			add_menu_page(
+			$menu = add_menu_page(
 				$this->page_title,
 				$this->menu_title ?: $this->page_title,
 				'manage_options',
@@ -71,6 +77,7 @@ abstract class Settings {
 				$this->position
 			);
 		}
+		$this->hook_suffix = $menu;
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 	}
 
@@ -114,11 +121,8 @@ abstract class Settings {
 	 * The Settings Page Hook, it's the same with global $hook_suffix.
 	 * @since 0.1.0
 	 */
-	public function get_hook_suffix_id(){
-		if ( is_admin() ) {
-			$hook_suffix = get_current_screen()->id;
-			return $hook_suffix;
-		}
+	public function get_hook_suffix(){
+		return $this->hook_suffix;
 	}
 
 	public function add_field( $field ) {
@@ -129,7 +133,9 @@ abstract class Settings {
 	 * Load Script Needed For Meta Box
 	 * @since 0.1.0
 	 */
-	public function enqueue_scripts( $hook_suffix ) {}
+	public function enqueue_scripts( $hook_suffix ) {
+		return;
+	}
 
 	/**
 	 * Get Settings Fields.
