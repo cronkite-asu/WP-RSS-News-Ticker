@@ -10,9 +10,6 @@ class SettingsMetaBox extends Settings {
 
 
 	public function __construct() {
-		/* Add Settings Page */
-		add_action( 'admin_menu', [ $this, 'settings_setup' ] );
-
 		/* Add Meta Box */
 		add_action( 'add_meta_boxes', [ $this, 'submit_add_meta_box' ] );
 
@@ -21,6 +18,8 @@ class SettingsMetaBox extends Settings {
 
 		/* Add Meta Box */
 		add_action( 'add_meta_boxes', [ $this, 'repeater_meta_box' ] );
+
+		parent::__construct();
 	}
 
 	/**
@@ -34,9 +33,9 @@ class SettingsMetaBox extends Settings {
 
 		/* Register our setting. */
 		register_setting(
-			$this->id . '_settings_page',	/* Option Group */
-			$this->id . '_option',		/* Option Name */
-			[ $this, 'repeater_sanitize' ]	/* Sanitize Callback */
+			$this->id . '_settings_page',		/* Option Group */
+			$this->id . '_option',			/* Option Name */
+			[ $this, 'sanitize_repeater_field' ]	/* Sanitize Callback */
 		);
 
 		/* Add settings menu page */
@@ -45,7 +44,7 @@ class SettingsMetaBox extends Settings {
 			$this->menu_title ?: $this->page_title,	/* Menu Title */
 			'manage_options',			/* Capability */
 			$this->id . '_settings_page',		/* Page Slug */
-			[ $this, 'settings_page' ],		/* Settings Page Function Callback */
+			[ $this, 'render_page' ],		/* Settings Page Function Callback */
 			$this->icon_url,		   	/* Menu Icon */
 			$this->position				/* Menu Position */
 		);
@@ -58,10 +57,6 @@ class SettingsMetaBox extends Settings {
 
 			/* Load the JavaScript needed for the settings screen. */
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
-			add_action( "admin_footer-{$page_hook_id}", [ $this, 'footer_scripts' ] );
-
-			/* Set number of column available. */
-			add_filter( 'screen_layout_columns', [ $this, 'screen_layout_column' ], 10, 2 );
 
 		}
 	}
@@ -78,6 +73,9 @@ class SettingsMetaBox extends Settings {
 			wp_enqueue_script( 'wp-util' );
 			wp_enqueue_script( 'postbox' );
 		}
+		add_action( "admin_footer-{$page_hook_id}", [ $this, 'footer_scripts' ] );
+		/* Set number of column available. */
+		add_filter( 'screen_layout_columns', [ $this, 'screen_layout_column' ], 10, 2 );
 	}
 
 	/**
@@ -144,10 +142,10 @@ class SettingsMetaBox extends Settings {
 
 	/**
 	 * Settings Page Callback
-	 * used in settings_setup().
+	 * used in register_fields().
 	 * @since 0.1.0
 	 */
-	public function settings_page(){
+	public function render_page(){
 
 		/* global vars */
 		global $hook_suffix;
@@ -161,7 +159,8 @@ class SettingsMetaBox extends Settings {
 
 		<div class="wrap">
 
-			<h2>Settings Meta Box <a class="add-new-h2" target="_blank" href="http://shellcreeper.com/wp-settings-meta-box/">Read Tutorial</a></h2>
+			<div id="icon-options-general" class="icon32"><br></div>
+			<h2><?php echo $this->page_title; ?></h2>
 
 			<?php settings_errors(); ?>
 
@@ -420,11 +419,21 @@ class SettingsMetaBox extends Settings {
 	}
 
 	/**
+	 * Render Repeater input
+	 *
+	 * @param $args
+	 * @return void
+	 */
+	public function render_repeater( $args ) {
+		return;
+	}
+
+	/**
 	 * Sanitize Repeater Settings
 	 * This function is defined in register_setting().
 	 * @since 0.1.0
 	 */
-	public function repeater_sanitize( $settings  ){
+	public function sanitize_repeater_field( $settings  ){
 		$settings = map_deep( $settings, 'sanitize_text_field' );
 		return $settings ;
 	}
