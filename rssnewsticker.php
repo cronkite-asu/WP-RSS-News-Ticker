@@ -228,11 +228,11 @@ class Rssnewsticker {
 	}
 
 	public function fetch_local_headlines() {
-		$text = $this->settings->get_option('school_news');
+		$text = $this->metabox->get_option('ticker_text');
 
-		$lines = explode(PHP_EOL, $text);
+		#$lines = explode(PHP_EOL, $text);
 
-		return $lines;
+		return $text;
 	}
 
 	public function fetch_ap_headlines() {

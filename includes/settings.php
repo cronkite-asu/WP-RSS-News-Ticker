@@ -58,7 +58,7 @@ abstract class Settings {
 
 	public function register_page() {
 		if ( $this->parent_menu ) {
-			$menu = add_submenu_page(
+			$settings_page = add_submenu_page(
 				$this->parent_menu,
 				$this->page_title,
 				$this->menu_title ?: $this->page_title,
@@ -67,7 +67,7 @@ abstract class Settings {
 				[ $this, 'render_page']
 			);
 		} else {
-			$menu = add_menu_page(
+			$settings_page = add_menu_page(
 				$this->page_title,
 				$this->menu_title ?: $this->page_title,
 				'manage_options',
@@ -77,8 +77,14 @@ abstract class Settings {
 				$this->position
 			);
 		}
-		$this->hook_suffix = $menu;
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+
+		/* Do stuff in settings page, such as adding scripts, etc. */
+		if ( !empty( $settings_page ) ) {
+			$this->hook_suffix = $settings_page;
+
+			/* Load the JavaScript needed for the settings screen. */
+			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+		}
 	}
 
 	public function render_page() {
@@ -210,6 +216,9 @@ abstract class Settings {
 				case 'checkbox':
 					$input[ $field['name'] ] = $this->sanitize_checkbox_field( $input[ $field['name'] ] );
 					break;
+				case 'array':
+					$input[ $field['name'] ] = $this->sanitize_array_field( $input[ $field['name'] ] );
+					break;
 			}
 		}
 
@@ -233,6 +242,19 @@ abstract class Settings {
 		if ( array_key_exists( $value, $choices ) ) {
 			return $value;
 		}
+	}
+
+	/**
+	 * Sanitizes the array field.
+	 */
+	protected function sanitize_array_field( $values = [], $field_args = [] ) {
+
+		// Remove empty entries from array
+		$values = array_filter($values);
+
+		// Santize entries as text
+		$values = map_deep( $values, 'sanitize_text_field' );
+		return $values;
 	}
 
 	/**

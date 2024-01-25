@@ -10,60 +10,13 @@ class SettingsMetaBox extends Settings {
 
 
 	public function __construct() {
-		/* Add Settings Page */
-		add_action( 'admin_menu', [ $this, 'settings_setup' ] );
+		/* Pre Settings */
+		add_action( $this->id . '_settings_before_options', [ $this, 'settings_before_options' ] );
 
 		/* Add Meta Box */
-		add_action( 'add_meta_boxes', [ $this, 'submit_add_meta_box' ] );
+		//add_action( 'add_meta_boxes', [ $this, 'register_meta_boxes' ] );
 
-		/* Reset Settings */
-		add_action( 'settings_page_init', [ $this, 'reset_settings' ] );
-
-		/* Add Meta Box */
-		add_action( 'add_meta_boxes', [ $this, 'repeater_meta_box' ] );
-	}
-
-	/**
-	 * Create Settings Page
-	 * @since 0.1.0
-	 * @link http://codex.wordpress.org/Function_Reference/register_setting
-	 * @link http://codex.wordpress.org/Function_Reference/add_menu_page
-	 * @uses get_hook_suffix()
-	 */
-	public function settings_setup(){
-
-		/* Register our setting. */
-		register_setting(
-			$this->id . '_settings_page',	/* Option Group */
-			$this->id . '_option',		/* Option Name */
-			[ $this, 'repeater_sanitize' ]	/* Sanitize Callback */
-		);
-
-		/* Add settings menu page */
-		$settings_page = add_menu_page(
-			$this->page_title,			/* Page Title */
-			$this->menu_title ?: $this->page_title,	/* Menu Title */
-			'manage_options',			/* Capability */
-			$this->id . '_settings_page',		/* Page Slug */
-			[ $this, 'settings_page' ],		/* Settings Page Function Callback */
-			$this->icon_url,		   	/* Menu Icon */
-			$this->position				/* Menu Position */
-		);
-
-		/* Vars */
-		$page_hook_id = $this->get_hook_suffix();
-
-		/* Do stuff in settings page, such as adding scripts, etc. */
-		if ( !empty( $settings_page ) ) {
-
-			/* Load the JavaScript needed for the settings screen. */
-			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
-			add_action( "admin_footer-{$page_hook_id}", [ $this, 'footer_scripts' ] );
-
-			/* Set number of column available. */
-			add_filter( 'screen_layout_columns', [ $this, 'screen_layout_column' ], 10, 2 );
-
-		}
+		parent::__construct();
 	}
 
 	/**
@@ -78,6 +31,9 @@ class SettingsMetaBox extends Settings {
 			wp_enqueue_script( 'wp-util' );
 			wp_enqueue_script( 'postbox' );
 		}
+		add_action( "admin_footer-{$page_hook_id}", [ $this, 'footer_scripts' ] );
+		/* Set number of column available. */
+		add_filter( 'screen_layout_columns', [ $this, 'screen_layout_column' ], 10, 2 );
 	}
 
 	/**
@@ -89,13 +45,9 @@ class SettingsMetaBox extends Settings {
 	 */
 	public function footer_scripts(){
 		$page_hook_id = $this->get_hook_suffix();
+		$name = 'ticker_text';
 	?>
-	<script type="text/html" id="tmpl-repeater">
-		<div class="field-group">
-			<input type="text" name="<?php echo esc_attr( $this->id . '_option' ); ?>[]" value="" />
-			<button type="button" class="button button-secondary field-data-remove">X</button>
-		</div>
-	</script>
+
 	<script type="text/javascript">
 		//<![CDATA[
 		jQuery(document).ready( function($) {
@@ -104,8 +56,8 @@ class SettingsMetaBox extends Settings {
 			$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 			postboxes.add_postbox_toggles( '<?php echo $page_hook_id; ?>' );
 			// display spinner
-			$('#' . $this->id . '-form').submit( function(){
-				$('#publishing-action .spinner').css('display','inline');
+			$('<?php echo esc_attr( '#' . $this->id . '-form' ); ?>').submit( function(){
+				$('#publishing-action .spinner').addClass('is-active');
 			});
 			// confirm before reset
 			$('#delete-action .submitdelete').on('click', function() {
@@ -122,7 +74,7 @@ class SettingsMetaBox extends Settings {
 					e.preventDefault();
 					$(this).parent().remove();
 				});
-			}
+			});
 		});
 		//]]>
 	</script>
@@ -143,11 +95,54 @@ class SettingsMetaBox extends Settings {
 	}
 
 	/**
+	 * Register Meta Boxes
+	 *
+	 * @return void
+	 */
+	public function register_fields() {
+
+		$page_hook_id = $this->get_hook_suffix();
+		$fields = $this->get_fields();
+
+		register_setting(
+			$this->id . '_settings_page',
+			$this->id . '_options',
+			[
+				'sanitize_callback' => [ $this, 'sanitize' ]
+			]
+		);
+
+		foreach ( $fields as $field ) {
+			if ( 'section' === $field['type'] ) {
+				continue;
+			} else {
+				add_settings_field(
+					$field['name'],
+					$field['title'],
+					[ $this, 'render_field' ],
+					$this->id . '_settings_page',
+					$this->id . '_' . $field['section'] . '_section',
+					$field
+				);
+				add_meta_box (
+					$field['name'],				/* Meta Box ID */
+					$field['title'],			/* Title */
+					[ $this, 'render_meta_box' ],		/* Function Callback */
+					$page_hook_id,				/* Screen: Our Settings Page */
+					'normal',				/* Context */
+					'default',				/* Priority */
+					$field					/* Callback Args */
+				);
+			}
+		}
+	}
+
+	/**
 	 * Settings Page Callback
-	 * used in settings_setup().
+	 * used in register_fields().
 	 * @since 0.1.0
 	 */
-	public function settings_page(){
+	public function settings_before_options(){
 
 		/* global vars */
 		global $hook_suffix;
@@ -159,52 +154,41 @@ class SettingsMetaBox extends Settings {
 		do_action( 'add_meta_boxes', $hook_suffix );
 		?>
 
-		<div class="wrap">
+		<?php settings_errors(); ?>
 
-			<h2>Settings Meta Box <a class="add-new-h2" target="_blank" href="http://shellcreeper.com/wp-settings-meta-box/">Read Tutorial</a></h2>
+		<div class="<?php echo esc_attr( $this->id ); ?>">
 
-			<?php settings_errors(); ?>
+				<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
+				<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 
-			<div class="<?php echo esc_attr( $this->id ); ?>">
+				<div id="poststuff">
 
-				<form id="<?php echo esc_attr( $this->id ); ?>-form" method="post" action="options.php">
+					<div id="post-body" class="metabox-holder columns-<?php echo 1 == get_current_screen()->get_columns() ? '1' : '2'; ?>">
 
-					<?php settings_fields( $this->id . '_settings_page' ); // options group	 ?>
-					<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-					<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
+						<div id="postbox-container-1" class="postbox-container">
 
-					<div id="poststuff">
+							<?php do_meta_boxes( $hook_suffix, 'side', null ); ?>
+							<!-- #side-sortables -->
 
-						<div id="post-body" class="metabox-holder columns-<?php echo 1 == get_current_screen()->get_columns() ? '1' : '2'; ?>">
+						</div><!-- #postbox-container-1 -->
 
-							<div id="postbox-container-1" class="postbox-container">
+						<div id="postbox-container-2" class="postbox-container">
 
-								<?php do_meta_boxes( $hook_suffix, 'side', null ); ?>
-								<!-- #side-sortables -->
+							<?php do_meta_boxes( $hook_suffix, 'normal', null ); ?>
+							<!-- #normal-sortables -->
 
-							</div><!-- #postbox-container-1 -->
+							<?php do_meta_boxes( $hook_suffix, 'advanced', null ); ?>
+							<!-- #advanced-sortables -->
 
-							<div id="postbox-container-2" class="postbox-container">
+						</div><!-- #postbox-container-2 -->
 
-								<?php do_meta_boxes( $hook_suffix, 'normal', null ); ?>
-								<!-- #normal-sortables -->
+					</div><!-- #post-body -->
 
-								<?php do_meta_boxes( $hook_suffix, 'advanced', null ); ?>
-								<!-- #advanced-sortables -->
+					<br class="clear">
 
-							</div><!-- #postbox-container-2 -->
+				</div><!-- #poststuff -->
 
-						</div><!-- #post-body -->
-
-						<br class="clear">
-
-					</div><!-- #poststuff -->
-
-				</form>
-
-			</div><!-- .<?php echo esc_attr( $this->id ); ?> -->
-
-		</div><!-- .wrap -->
+		</div><!-- .<?php echo esc_attr( $this->id ); ?> -->
 		<?php
 	}
 
@@ -323,109 +307,65 @@ class SettingsMetaBox extends Settings {
 		}
 	}
 
-	/* === EXAMPLE BASIC META BOX === */
-
-
-	/**
-	 * Basic Meta Box
-	 * @since 0.1.0
-	 * @link http://codex.wordpress.org/Function_Reference/add_meta_box
-	 */
-	public function basic_add_meta_box(){
-
-		$page_hook_id = $this->get_hook_suffix();
-
-		add_meta_box(
-			$this->id . '_option',		/* Meta Box ID */
-			'Meta Box',			/* Title */
-			[ $this, 'basic_meta_box' ],	/* Function Callback */
-			$page_hook_id,			/* Screen: Our Settings Page */
-			'normal',			/* Context */
-			'default'			/* Priority */
-		);
-	}
-
-	/**
-	 * Submit Meta Box Callback
-	 * @since 0.1.0
-	 */
-	public function basic_meta_box(){
-	?>
-	<?php /* Simple Text Input Example */ ?>
-	<p>
-		<label for="basic-text">Basic Text Input</label>
-		<input id="basic-text" class="widefat" type="text" name=<?php echo esc_attr( $this->id . '_option' ); ?> value="<?php echo sanitize_text_field( get_option( $this->id . '_option', '' ) );?>">
-	</p>
-	<p class="howto">To display this option use PHP code <code>get_option( <?php echo esc_attr( $this->id . '_option' ); ?> );</code>.</p>
-	<?php
-	}
-
-	/**
-	 * Sanitize Basic Settings
-	 * This function is defined in register_setting().
-	 * @since 0.1.0
-	 */
-	public function basic_sanitize( $settings  ){
-		$settings = sanitize_text_field( $settings );
-		return $settings ;
-	}
-
 	/* === EXAMPLE REPEATER META BOX === */
 
 
 	/**
-	 * Repeater Meta Box
+	 * Render Meta Box
+	 * @param WP_Post $post    The current post.
+	 * @param array   $metabox With metabox id, title, callback, and args elements.
 	 * @since 0.1.0
 	 * @link http://codex.wordpress.org/Function_Reference/add_meta_box
 	 */
-	public function repeater_add_meta_box(){
+	public function render_meta_box( $post, $metabox ) {
 
-		$page_hook_id = $this->get_hook_suffix();
-
-		add_meta_box(
-			$this->id . '_option',		/* Meta Box ID */
-			'Repeater Meta Box',		/* Title */
-			[ $this, 'repeater_meta_box' ],	/* Function Callback */
-			$page_hook_id,			/* Screen: Our Settings Page */
-			'normal',			/* Context */
-			'default'			/* Priority */
-		);
+		$this->{'render_meta_box_' . $metabox['args']['type'] }( $metabox['args'] );
 	}
 
 	/**
 	 * Submit Repeater Meta Box Callback
-	 * u
 	 * @since 0.1.0
 	 */
-	public function repeater_meta_box(){
+	public function render_meta_box_array( $args ) {
 
-		$field_data = $this->get_option( $this->id, [""] );
-	?>
-	<?php /* Simple Text Input Example */ ?>
+		$class = ! empty( $args['class'] ) ? $args['class'] : '';
+		$default = ! empty( $args['default'] ) ? $args['default'] : [""];
+		$field_data = $this->get_option( $args['name'], $default );
+
+		error_log($this->get_option_key( $args['name'] ));
+
+		/* Repeater Text Input */
+		?>
 
 		<label for="field_data">
-			<strong><?php _e( 'Field Name', 'yourtextdomain' ); ?></strong>
+			<strong><?php echo esc_attr( $args['title'] ); ?></strong>
 		</label>
 		<div id="field_data">
-			<?php foreach( $field_data as $field ) { ?>
+			<?php foreach( $field_data as $i => $value ) { ?>
 			<div class="field-group">
-				<input type="text" name="<?php echo esc_attr( $this->id . '_option' ); ?>[]" value="<?php echo $field; ?>" />
-				<button type="button" class="button button-secondary field-data-remove">X</button>
+				<input type="text" id="<?php echo esc_attr( $args['name'] ); ?>-<?php echo $i; ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>[<?php echo $i; ?>]" value="<?php echo $value; ?>" />
+				<?php if ( $i != 0 ) { ?><button type="button" class="button button-secondary field-data-remove">X</button><?php } ?>
 			</div>
 			<?php } ?>
 		</div>
 		<button type="button" id="field_data_add" class="button button-primary">Add</button>
 
+		<script type="text/html" id="tmpl-repeater">
+			<div class="field-group">
+				<input type="text" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>[]" value="" />
+				<button type="button" class="button button-secondary field-data-remove">X</button>
+			</div>
+		</script>
 	<?php
 	}
 
 	/**
-	 * Sanitize Repeater Settings
-	 * This function is defined in register_setting().
-	 * @since 0.1.0
+	 * Render Repeater input
+	 *
+	 * @param $args
+	 * @return void
 	 */
-	public function repeater_sanitize( $settings  ){
-		$settings = map_deep( $settings, 'sanitize_text_field' );
-		return $settings ;
+	public function render_array( $args ) {
+		return;
 	}
 }
