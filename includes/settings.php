@@ -252,6 +252,7 @@ abstract class Settings {
 		// Remove empty entries from array
 		$values = array_filter($values);
 
+		// Santize entries as text
 		$values = map_deep( $values, 'sanitize_text_field' );
 		return $values;
 	}
