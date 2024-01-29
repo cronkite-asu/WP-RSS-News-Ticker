@@ -123,7 +123,7 @@ class SettingsTicker extends Settings {
 		<div id="field_data">
 			<?php foreach( $field_data as $i => $value ) { ?>
 			<div class="field-group">
-				<input type="text" id="<?php echo esc_attr( $args['name'] ); ?>-<?php echo $i; ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>[<?php echo $i; ?>]" value="<?php echo $value; ?>" />
+				<input type="text" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>[<?php echo $i; ?>]" value="<?php echo $value; ?>" />
 				<?php if ( $i != 0 ) { ?><button type="button" class="button button-secondary field-data-remove">X</button><?php } ?>
 			</div>
 			<?php } ?>
