@@ -248,6 +248,10 @@ abstract class Settings {
 	 * Sanitizes the array field.
 	 */
 	protected function sanitize_array_field( $values = [], $field_args = [] ) {
+
+		// Remove empty entries from array
+		$values = array_filter($values);
+
 		$values = map_deep( $values, 'sanitize_text_field' );
 		return $values;
 	}
