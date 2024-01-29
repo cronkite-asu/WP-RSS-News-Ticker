@@ -14,7 +14,7 @@ class SettingsMetaBox extends Settings {
 		add_action( $this->id . '_settings_before_options', [ $this, 'settings_before_options' ] );
 
 		/* Add Meta Box */
-		add_action( 'add_meta_boxes', [ $this, 'repeater_add_meta_box' ] );
+		//add_action( 'add_meta_boxes', [ $this, 'register_meta_boxes' ] );
 
 		parent::__construct();
 	}
@@ -47,12 +47,7 @@ class SettingsMetaBox extends Settings {
 		$page_hook_id = $this->get_hook_suffix();
 		$name = 'ticker_text';
 	?>
-	<script type="text/html" id="tmpl-repeater">
-		<div class="field-group">
-			<input type="text" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>[]" value="" />
-			<button type="button" class="button button-secondary field-data-remove">X</button>
-		</div>
-	</script>
+
 	<script type="text/javascript">
 		//<![CDATA[
 		jQuery(document).ready( function($) {
@@ -97,6 +92,49 @@ class SettingsMetaBox extends Settings {
 			$columns[$page_hook_id] = 2;
 		}
 		return $columns;
+	}
+
+	/**
+	 * Register Meta Boxes
+	 *
+	 * @return void
+	 */
+	public function register_fields() {
+
+		$page_hook_id = $this->get_hook_suffix();
+		$fields = $this->get_fields();
+
+		register_setting(
+			$this->id . '_settings_page',
+			$this->id . '_options',
+			[
+				'sanitize_callback' => [ $this, 'sanitize' ]
+			]
+		);
+
+		foreach ( $fields as $field ) {
+			if ( 'section' === $field['type'] ) {
+				continue;
+			} else {
+				add_settings_field(
+					$field['name'],
+					$field['title'],
+					[ $this, 'render_field' ],
+					$this->id . '_settings_page',
+					$this->id . '_' . $field['section'] . '_section',
+					$field
+				);
+				add_meta_box (
+					$field['name'],				/* Meta Box ID */
+					$field['title'],			/* Title */
+					[ $this, 'render_meta_box' ],		/* Function Callback */
+					$page_hook_id,				/* Screen: Our Settings Page */
+					'normal',				/* Context */
+					'default',				/* Priority */
+					$field					/* Callback Args */
+				);
+			}
+		}
 	}
 
 	/**
@@ -269,102 +307,55 @@ class SettingsMetaBox extends Settings {
 		}
 	}
 
-	/* === EXAMPLE BASIC META BOX === */
-
-
-	/**
-	 * Basic Meta Box
-	 * @since 0.1.0
-	 * @link http://codex.wordpress.org/Function_Reference/add_meta_box
-	 */
-	public function basic_add_meta_box(){
-
-		$page_hook_id = $this->get_hook_suffix();
-
-		add_meta_box(
-			$this->id . '_option',		/* Meta Box ID */
-			'Meta Box',			/* Title */
-			[ $this, 'basic_meta_box' ],	/* Function Callback */
-			$page_hook_id,			/* Screen: Our Settings Page */
-			'normal',			/* Context */
-			'default'			/* Priority */
-		);
-	}
-
-	/**
-	 * Submit Meta Box Callback
-	 * @since 0.1.0
-	 */
-	public function basic_meta_box(){
-	?>
-	<?php /* Simple Text Input Example */ ?>
-	<p>
-		<label for="basic-text">Basic Text Input</label>
-		<input id="basic-text" class="widefat" type="text" name=<?php echo esc_attr( $this->id . '_option' ); ?> value="<?php echo sanitize_text_field( get_option( $this->id . '_option', '' ) );?>">
-	</p>
-	<p class="howto">To display this option use PHP code <code>get_option( <?php echo esc_attr( $this->id . '_option' ); ?> );</code>.</p>
-	<?php
-	}
-
-	/**
-	 * Sanitize Basic Settings
-	 * This function is defined in register_setting().
-	 * @since 0.1.0
-	 */
-	public function basic_sanitize( $settings  ){
-		$settings = sanitize_text_field( $settings );
-		return $settings ;
-	}
-
 	/* === EXAMPLE REPEATER META BOX === */
 
 
 	/**
-	 * Repeater Meta Box
+	 * Render Meta Box
+	 * @param WP_Post $post    The current post.
+	 * @param array   $metabox With metabox id, title, callback, and args elements.
 	 * @since 0.1.0
 	 * @link http://codex.wordpress.org/Function_Reference/add_meta_box
 	 */
-	public function repeater_add_meta_box(){
+	public function render_meta_box( $post, $metabox ) {
 
-		$page_hook_id = $this->get_hook_suffix();
-
-		add_meta_box(
-			$this->id . '_option',		/* Meta Box ID */
-			'Repeater Meta Box',		/* Title */
-			[ $this, 'repeater_meta_box' ],	/* Function Callback */
-			$page_hook_id,			/* Screen: Our Settings Page */
-			'normal',			/* Context */
-			'default'			/* Priority */
-		);
+		$this->{'render_meta_box_' . $metabox['args']['type'] }( $metabox['args'] );
 	}
 
 	/**
 	 * Submit Repeater Meta Box Callback
 	 * @since 0.1.0
 	 */
-	public function repeater_meta_box(){
+	public function render_meta_box_array( $args ) {
 
-		$name = 'ticker_text';
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : [""];
-		$field_data = $this->get_option( $name, [""] );
+		$field_data = $this->get_option( $args['name'], $default );
+
+		error_log($this->get_option_key( $args['name'] ));
 
 		/* Repeater Text Input */
 		?>
 
 		<label for="field_data">
-			<strong><?php _e( 'Field Name', 'yourtextdomain' ); ?></strong>
+			<strong><?php echo esc_attr( $args['title'] ); ?></strong>
 		</label>
 		<div id="field_data">
 			<?php foreach( $field_data as $i => $value ) { ?>
 			<div class="field-group">
-				<input type="text" id="<?php echo esc_attr( $name ); ?>-<?php echo $i; ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>[<?php echo $i; ?>]" value="<?php echo $value; ?>" />
+				<input type="text" id="<?php echo esc_attr( $args['name'] ); ?>-<?php echo $i; ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>[<?php echo $i; ?>]" value="<?php echo $value; ?>" />
 				<?php if ( $i != 0 ) { ?><button type="button" class="button button-secondary field-data-remove">X</button><?php } ?>
 			</div>
 			<?php } ?>
 		</div>
 		<button type="button" id="field_data_add" class="button button-primary">Add</button>
 
+		<script type="text/html" id="tmpl-repeater">
+			<div class="field-group">
+				<input type="text" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>[]" value="" />
+				<button type="button" class="button button-secondary field-data-remove">X</button>
+			</div>
+		</script>
 	<?php
 	}
 
