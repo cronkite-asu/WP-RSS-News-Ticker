@@ -21,6 +21,8 @@ class SettingsTicker extends SettingsMetaBox {
 		$this->icon_url = 'dashicons-rss';
 		$this->position = 30;
 
+		$this->define_fields();
+
 		parent::__construct();
 	}
 
@@ -37,7 +39,9 @@ class SettingsTicker extends SettingsMetaBox {
 			'title' => 'Ticker Text',
 			'description' => 'Custom text to display on the news ticker.',
 			'type' => 'array',
-			'section' => 'ticker_config_section'
+			'section' => 'ticker_config_section',
+			'class' => 'widefat',
+			'default' => [ 'Welcome to the Walter Cronkite School of Journalism and Mass Communication' ],
 		];
 	}
 
