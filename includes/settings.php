@@ -248,7 +248,7 @@ abstract class Settings {
 	 * Sanitizes the array field.
 	 */
 	protected function sanitize_array_field( $values = [], $field_args = [] ) {
-		$values = map_deep( $settings, 'sanitize_text_field' );
+		$values = map_deep( $values, 'sanitize_text_field' );
 		return $values;
 	}
 
