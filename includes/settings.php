@@ -40,6 +40,12 @@ abstract class Settings {
 	protected $position = null;
 
 	/**
+	 * Submit button args.
+	 * @var array
+	 */
+	protected $submit_args = [null, 'primary', 'submit', true, null];
+
+	/**
 	 * Settings Fields.
 	 * @var array
 	 */
@@ -107,7 +113,7 @@ abstract class Settings {
 
 				do_action( 'pmpro_' . $this->id . '_settings_before_submit_button' );
 
-				submit_button( __( 'Save Settings', 'your_textdomain' ) );
+				submit_button(...$this->submit_args);
 
 				do_action( $this->id . '_settings_after_submit_button' );
 				?>
