@@ -14,6 +14,7 @@ class SettingsTicker extends Settings {
 		$this->menu_title = 'Cronkite Ticker';
 		$this->icon_url = 'dashicons-rss';
 		$this->position = 30;
+		$this->submit_args = [null, 'large', 'submit', false, null];
 
 		$this->define_fields();
 
@@ -63,11 +64,10 @@ class SettingsTicker extends Settings {
 	public function render_array( $args ) {
 
 		$page_hook_id = $this->get_hook_suffix();
+
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : [""];
 		$field_data = $this->get_option( $args['name'], $default );
-
-		error_log($this->get_option_key( $args['name'] ));
 
 		/* Repeater Text Input */
 		if ( ! empty( $args['description'] ) ) {
@@ -82,16 +82,33 @@ class SettingsTicker extends Settings {
 			<?php foreach( $field_data as $i => $value ) { ?>
 			<div class="field-group">
 				<input type="text" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>[<?php echo $i; ?>]" value="<?php echo $value; ?>" />
-				<?php if ( $i != 0 ) { ?><button type="button" class="button button-secondary field-data-remove">X</button><?php } ?>
+				<?php if ( $i != 0 ) { ?><button type="button" class="button button-small field-data-remove">X</button><?php } ?>
 			</div>
 			<?php } ?>
 		</div>
-		<button type="button" class="button button-primary field-data-add">Add</button>
+		<button type="button" class="button button-secondary field-data-add">Add</button>
+	<?php
+		add_action("admin_footer-{$page_hook_id}", function() use ( $args ) {
+			call_user_func([ $this, 'footer_scripts' ], $args);
+		});
+	}
 
-		<script type="text/html" id="tmpl-<?php echo esc_attr( $args['name'] ); ?>-repeater">
+	/**
+	 * Footer Script Needed for Meta Box:
+	 * - Meta Box Toggle.
+	 * - Spinner for Saving Option.
+	 * - Reset Settings Confirmation
+	 * @since 0.1.0
+	 */
+	public function footer_scripts( $args ){
+		$name = $args['name'];
+		$class = ! empty( $args['class'] ) ? $args['class'] : '';
+	?>
+
+		<script type="text/html" id="tmpl-<?php echo esc_attr( $name ); ?>-repeater">
 			<div class="field-group">
-				<input type="text" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>[]" value="" />
-				<button type="button" class="button button-secondary field-data-remove">X</button>
+				<input type="text" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>[]" value="" />
+				<button type="button" class="button button-small field-data-remove">X</button>
 			</div>
 		</script>
 
@@ -100,10 +117,10 @@ class SettingsTicker extends Settings {
 			jQuery(document).ready( function($) {
 				'use strict';
 				$(function(){
-					var $fieldData = $('#<?php echo esc_attr( $args['name'] ); ?>-field_data');
+					var $fieldData = $('#<?php echo esc_attr( $name ); ?>-field_data');
 					$fieldData.next(".field-data-add").on( 'click', function(e){
 						e.preventDefault();
-						var template = wp.template('<?php echo esc_attr( $args['name'] ); ?>-repeater'),
+						var template = wp.template('<?php echo esc_attr( $name ); ?>-repeater'),
 							html = template();
 						$fieldData.append( html );
 					});
@@ -115,7 +132,7 @@ class SettingsTicker extends Settings {
 			});
 			//]]>
 		</script>
-	<?php
+<?php
 	}
 
 }
