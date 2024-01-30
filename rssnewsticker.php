@@ -235,17 +235,22 @@ class Rssnewsticker {
 	}
 
 	public function fetch_ap_headlines() {
+		$enabled = $this->settings->get_option('ap_enable');
 		$productid = $this->settings->get_option('ap_productid');
 		$page_size = $this->settings->get_option('ap_page_size');
 		$api_key = $this->settings->get_option('ap_api_key');
 		$pre_feed = $this->settings->get_option('ap_pre_feed');
 
-		$remote_request = new RemoteAPHeadlines( $productid, $api_key, $page_size );
-		$remote_request->run();
+		$headlines = [];
 
-		$headlines = $remote_request->get_ap_headlines();
+		if ($enabled === 1) {
+			$remote_request = new RemoteAPHeadlines( $productid, $api_key, $page_size );
+			$remote_request->run();
 
-		array_unshift($headlines, $pre_feed);
+			$headlines = $remote_request->get_ap_headlines();
+
+			array_unshift($headlines, $pre_feed);
+		}
 		return $headlines;
 	}
 

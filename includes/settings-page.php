@@ -44,11 +44,19 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			'type' => 'section'
 		];
 
+		$this->fields['ap_enable'] = [
+			'name' => 'ap_enable',
+			'title' => 'Enable AP Feed',
+			'type' => 'checkbox',
+			'section' => 'ap_config_section'
+		];
+
 		$this->fields['ap_productid'] = [
 			'name' => 'ap_productid',
 			'title' => 'AP product ID',
 			'description' => 'AP product ID.',
 			'type' => 'text',
+			'class' => 'ap-input',
 			'section' => 'ap_config_section'
 		];
 
@@ -57,7 +65,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			'title' => 'API key',
 			'description' => 'Key to send for API auth.',
 			'type' => 'text',
-			'class' => 'regular-text',
+			'class' => 'ap-input regular-text',
 			'section' => 'ap_config_section'
 		];
 
@@ -66,7 +74,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			'title' => 'Page Size',
 			'description' => 'Number of news stories to retrieve.',
 			'type' => 'number',
-			'class' => 'tiny-text',
+			'class' => 'ap-input tiny-text',
 			'default' => 5,
 			'max' => 10,
 			'section' => 'ap_config_section'
@@ -77,7 +85,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			'title' => 'Intro Text',
 			'description' => 'Text to display before the AP headlines.',
 			'type' => 'text',
-			'class' => 'large-text',
+			'class' => 'ap-input large-text',
 			'default' => 'The latest headlines from the Associated Press',
 			'section' => 'ap_config_section'
 		];
@@ -129,11 +137,19 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 		//<![CDATA[
 		jQuery(document).ready( function($) {
 			var $feedNameInput = $('#feed_name-input');
+			var $apEnableInput = $('#ap_enable-input');
 			var $apProductIDInput = $('#ap_productid-input');
 			var $apAPIKeyInput = $('#ap_api_key-input');
 			var $apPreFeedInput = $('#ap_pre_feed-input');
 
+			updateAPInputs($apEnableInput.is(':checked'),"ap-input");
 			updateLastText('feed_name-description',$feedNameInput.val());
+
+			$apEnableInput.on("change", function() {
+
+				$enabled=$(this).is(':checked')
+				updateAPInputs($enabled, "ap-input");
+			});
 
 			$feedNameInput.on("change keyup paste", function() {
 
@@ -220,9 +236,17 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			$inputField.focus();
 		} // end function outputErrorMessage($inputField, $errorMessage)
 
-		function updateButton($id, $searchClass) {
+		function updateAPInputs($enabled, $searchclass) {
+			const $list = document.getElementsByClassName($searchclass);
+			for (var $node of $list) {
+				// set each disabled with reverse of $enabled var
+				$node.readOnly = !$enabled;
+			}
+		}
+
+		function updateButton($id, $searchclass) {
 			const $button = document.getElementById($id);
-			if (document.getElementsByClassName($searchClass).length > 0) {
+			if (document.getElementsByClassName($searchclass).length > 0) {
 				$button.disabled = true;
 			} else {
 				$button.disabled = false;

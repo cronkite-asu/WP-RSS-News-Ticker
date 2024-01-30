@@ -312,8 +312,9 @@ abstract class Settings {
 	public function render_text( $args ) {
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
+		$pattern = $args['pattern'] ?? '';
 		?>
-		<input type="text" id="<?php echo esc_attr( $args['name'] ); ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" />
+			<input type="text" id="<?php echo esc_attr( $args['name'] ); ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" <?php if ( ! empty( $args['pattern'] ) ) { ?> pattern="<?php echo esc_attr( $pattern ); ?>"<?php } ?> />
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
