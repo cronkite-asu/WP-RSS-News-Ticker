@@ -38,22 +38,6 @@ class SettingsPage extends Settings {
 			'section' => 'feed_config_section'
 		];
 
-		$this->fields['local_config_section'] = [
-			'name' => 'local_config_section',
-			'title' => 'Local Feed Configuration',
-			'description' => 'Settings for the local feed.',
-			'type' => 'section'
-		];
-
-
-		$this->fields['school_news'] = [
-			'name' => 'school_news',
-			'title' => 'School News',
-			'description' => 'News from the school to display on in the feed. ',
-			'type' => 'textarea',
-			'section' => 'local_config_section'
-		];
-
 		$this->fields['ap_config_section'] = [
 			'name' => 'ap_config_section',
 			'title' => 'AP Configuration',
