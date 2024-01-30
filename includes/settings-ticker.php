@@ -52,6 +52,7 @@ class SettingsTicker extends Settings {
 			wp_enqueue_script( 'wp-util' );
 			wp_enqueue_script( 'postbox' );
 		}
+		add_action( "admin_head-{$page_hook_id}", [ $this, 'head_scripts' ] );
 	}
 
 	/**
@@ -91,6 +92,24 @@ class SettingsTicker extends Settings {
 		add_action("admin_footer-{$page_hook_id}", function() use ( $args ) {
 			call_user_func([ $this, 'footer_scripts' ], $args);
 		});
+	}
+
+	/**
+	 * Footer Script Needed for Meta Box:
+	 * - Meta Box Toggle.
+	 * - Spinner for Saving Option.
+	 * - Reset Settings Confirmation
+	 * @since 0.1.0
+	 */
+	public function head_scripts(){
+	?>
+
+		<style type="text/css">
+			.field-group {
+				display: flex;
+			}
+		</style>
+<?php
 	}
 
 	/**
