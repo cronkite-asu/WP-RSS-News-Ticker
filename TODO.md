@@ -2,16 +2,16 @@
 
 ### Todo
 
-- [ ] Validate path input for url field in config page.
 - [ ] Cache Feed.
   - [ ] Use tranisents to cache API calls.
-- [ ] Make AP News feed optional.
 - [ ] Add capablity to manage page tabs.
 - [ ] Add optional local feeds from news post types.
 - [ ] Cleanup settings on removal of plugin.
 
 ### In Progress
 
+- [ ] Validate path input for url field in config page.
+- [ ] Make AP News feed optional.
 
 ### Done ✓
 
