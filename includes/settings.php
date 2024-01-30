@@ -131,7 +131,7 @@ abstract class Settings {
 	/**
 	 * Utility: Page Hook
 	 * The Settings Page Hook, it's the same with global $hook_suffix.
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 */
 	public function get_hook_suffix(){
 		return $this->hook_suffix;
@@ -143,7 +143,7 @@ abstract class Settings {
 
 	/**
 	 * Load Script Needed For Meta Box
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 */
 	public function enqueue_scripts( $hook_suffix ) {
 		return;

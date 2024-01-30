@@ -42,7 +42,7 @@ class SettingsTicker extends Settings {
 
 	/**
 	 * Load Script Needed For Repeater input
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 */
 	public function enqueue_scripts( $hook_suffix ){
 		$page_hook_id = $this->get_hook_suffix();
@@ -60,7 +60,7 @@ class SettingsTicker extends Settings {
 	 *
 	 * @param $args
 	 * @return void
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 */
 	public function render_array( $args ) {
 
@@ -99,7 +99,7 @@ class SettingsTicker extends Settings {
 	 * - Meta Box Toggle.
 	 * - Spinner for Saving Option.
 	 * - Reset Settings Confirmation
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 */
 	public function head_scripts(){
 	?>
@@ -117,7 +117,7 @@ class SettingsTicker extends Settings {
 	 * - Meta Box Toggle.
 	 * - Spinner for Saving Option.
 	 * - Reset Settings Confirmation
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 */
 	public function footer_scripts( $args ){
 		$name = $args['name'];
