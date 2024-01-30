@@ -101,7 +101,7 @@ class SettingsPage extends Settings {
 
 	/**
 	 * Load Script Needed For Meta Box
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 */
 	public function enqueue_scripts( $hook_suffix ){
 		$page_hook_id = $this->get_hook_suffix();
@@ -113,7 +113,7 @@ class SettingsPage extends Settings {
 	 * - Meta Box Toggle.
 	 * - Spinner for Saving Option.
 	 * - Reset Settings Confirmation
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 */
 	public function footer_scripts(){
 	?>
