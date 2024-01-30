@@ -11,6 +11,7 @@ class SettingsPage extends Settings {
 	public function __construct() {
 		$this->id = 'rssnewsticker';
 		$this->page_title = 'Ticker Feed';
+		$this->parent_menu = 'options-general.php';
 		$this->menu_title = 'Ticker';
 
 		$this->define_fields();

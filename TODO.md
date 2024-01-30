@@ -13,8 +13,8 @@
 ### In Progress
 
 - [ ] Remove school news from AP config page.
-- [ ] Move configuration page to be a submenu of Settings main menu.
 
 ### Done ✓
 
+- [x] Move configuration page to be a submenu of Settings main menu.
 - [x] Create TODO.md
