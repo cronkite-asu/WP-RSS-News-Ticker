@@ -17,6 +17,7 @@
 
 namespace Rssnewsticker;
 include_once 'includes/settings.php';
+include_once 'includes/settings-meta-box.php';
 include_once 'includes/settings-page.php';
 include_once 'includes/settings-ticker.php';
 include_once 'includes/remote.php';
