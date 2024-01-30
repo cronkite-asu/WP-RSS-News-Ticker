@@ -145,7 +145,7 @@ class SettingsPage extends Settings {
 			}
 		}
 	//]]>
-</script>
+	</script>
 <?php
-}
+	}
 }
