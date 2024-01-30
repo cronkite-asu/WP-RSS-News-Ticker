@@ -69,10 +69,10 @@ class Rssnewsticker {
 	protected $page;
 
 	/**
-	 * Settings
+	 * TIcker
 	 * @var [type]
 	 */
-	protected $metabox;
+	protected $ticker;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -91,7 +91,7 @@ class Rssnewsticker {
 		}
 		$this->plugin_name = 'rssnewsticker';
 		$this->settings = new SettingsPage();
-		$this->metabox = new SettingsTicker();
+		$this->ticker = new SettingsTicker();
 
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
@@ -227,7 +227,7 @@ class Rssnewsticker {
 	}
 
 	public function fetch_local_headlines() {
-		$text = $this->metabox->get_option('ticker_text');
+		$text = $this->ticker->get_option('ticker_text');
 
 		#$lines = explode(PHP_EOL, $text);
 

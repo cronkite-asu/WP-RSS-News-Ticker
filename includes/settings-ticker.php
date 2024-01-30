@@ -95,10 +95,7 @@ class SettingsTicker extends Settings {
 	}
 
 	/**
-	 * Footer Script Needed for Meta Box:
-	 * - Meta Box Toggle.
-	 * - Spinner for Saving Option.
-	 * - Reset Settings Confirmation
+	 * Head Scripts:
 	 * @since 1.0.0
 	 */
 	public function head_scripts(){
@@ -113,10 +110,9 @@ class SettingsTicker extends Settings {
 	}
 
 	/**
-	 * Footer Script Needed for Meta Box:
-	 * - Meta Box Toggle.
-	 * - Spinner for Saving Option.
-	 * - Reset Settings Confirmation
+	 * Footer Script:
+	 * - Repeater Box template.
+	 * - Add and remove repater boxes.
 	 * @since 1.0.0
 	 */
 	public function footer_scripts( $args ){
