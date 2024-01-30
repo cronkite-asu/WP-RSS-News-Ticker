@@ -15,7 +15,7 @@ class SettingsPage extends Settings {
 		$this->menu_title = 'Ticker';
 
 		$this->define_fields();
-
+add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 10, 4 );
 
 		parent::__construct();
 	}
@@ -27,7 +27,6 @@ class SettingsPage extends Settings {
 			'description' => 'Settings for the RSS feed.',
 			'type' => 'section'
 		];
-
 
 		$this->fields['feed_name'] = [
 			'name' => 'feed_name',
@@ -85,19 +84,43 @@ class SettingsPage extends Settings {
 	}
 
 	/**
-	 * Load Script Needed For Meta Box
+	 * Load Scripts
 	 * @since 1.0.0
 	 */
 	public function enqueue_scripts( $hook_suffix ){
 		$page_hook_id = $this->get_hook_suffix();
+		add_action( "admin_head-{$page_hook_id}", [ $this, 'head_scripts' ] );
 		add_action( "admin_footer-{$page_hook_id}", [ $this, 'footer_scripts' ] );
 	}
 
 	/**
-	 * Footer Script Needed for Meta Box:
-	 * - Meta Box Toggle.
-	 * - Spinner for Saving Option.
-	 * - Reset Settings Confirmation
+	 * Head Scripts:
+	 * @since 1.0.0
+	 */
+	public function head_scripts(){
+	?>
+
+		<style type="text/css">
+			input[type=text] + p.errorMessage {
+				display: inline;
+				margin-left: 5px;
+			}
+
+			.errorField {
+				border: 1px solid red;
+			}
+
+			.errorMessage {
+				color: red;
+			}
+		</style>
+<?php
+	}
+
+	/**
+	 * Footer Scripts:
+	 * - Update url text on input.
+	 * - Validate url path.
 	 * @since 1.0.0
 	 */
 	public function footer_scripts(){
@@ -106,31 +129,117 @@ class SettingsPage extends Settings {
 		//<![CDATA[
 		jQuery(document).ready( function($) {
 			var $feedNameInput = $('#feed_name-input');
+			var $apProductIDInput = $('#ap_productid-input');
+			var $apAPIKeyInput = $('#ap_api_key-input');
+			var $apPreFeedInput = $('#ap_pre_feed-input');
 
 			updateLastText('feed_name-description',$feedNameInput.val());
 
 			$feedNameInput.on("change keyup paste", function() {
-				updateLastText('feed_name-description',$feedNameInput.val());
+
+				var regEx = /^[a-zA-Z0-9._-]{0,63}$/;
+
+				if (!regEx.test($(this).val())) {
+					outputErrorMessage($(this),
+					'<p class="errorMessage">Enter a valid path.</p>');
+				} else {
+					$(this).removeClass('errorField');
+					$(this).next(".errorMessage").remove();
+					updateLastText('feed_name-description',$(this).val());
+				}
+			});
+
+			$apProductIDInput.on("change keyup paste", function() {
+
+				if (isNaN($(this).val())) {
+					outputErrorMessage($(this),
+					'<p class="errorMessage">Enter a valid product ID.</p>');
+				} else {
+					$(this).removeClass('errorField');
+					$(this).next(".errorMessage").remove();
+				}
+			});
+
+			$apAPIKeyInput.on("change keyup paste", function() {
+
+				var regEx = /^[a-z0-9._-]{0,28}$/;
+
+				if (!regEx.test($(this).val())) {
+					outputErrorMessage($(this),
+					'<p class="errorMessage">Enter a valid API key.</p>');
+				} else {
+					$(this).removeClass('errorField');
+					$(this).next(".errorMessage").remove();
+				}
+			});
+
+			$apPreFeedInput.on("change keyup paste", function() {
+
+				if ($.trim( $(this).val() ) == '') {
+					outputErrorMessage($(this),
+					'<p class="errorMessage">Please fill in text.</p>');
+				} else {
+					$(this).removeClass('errorField');
+					$(this).next(".errorMessage").remove();
+				}
+			});
+
+			// listen for any input and update the submit button
+			$( "body" ).on( "change keyup paste", "input", function( event ) {
+				updateButton('submit', "errorMessage");
 			});
 		});
 
-		function updateLastText(id, text) {
-			const node = document.getElementById(id);
+		function updateLastText($id, $text) {
+			const $node = document.getElementById($id);
 
-			if (JSON.stringify(node) == "null") {
+			if (JSON.stringify($node) == "null") {
 				return;
 			}
 
-			const newtext = document.createTextNode(text);
+			const $newtext = document.createTextNode($text);
 
-			if (node.childNodes.length > 1) {
-				node.replaceChild(newtext,node.lastChild);
+			if ($node.childNodes.length > 1) {
+				$node.replaceChild($newtext,$node.lastChild);
 			} else {
-				node.appendChild(newtext);
+				$node.appendChild($newtext);
 			}
 		}
-	//]]>
+
+		function outputErrorMessage($inputField, $errorMessage) {
+			// If there is a previous message
+			if ($inputField.next().hasClass( "errorMessage" )) {
+				// Remove the previous message
+				$inputField.next(".errorMessage").remove();
+			} // end if
+
+			// Show the error message
+			$inputField.after($errorMessage);
+			// 'Highlight' the field
+			$inputField.addClass('errorField');
+			$inputField.focus();
+		} // end function outputErrorMessage($inputField, $errorMessage)
+
+		function updateButton($id, $searchClass) {
+			const $button = document.getElementById($id);
+			if (document.getElementsByClassName($searchClass).length > 0) {
+				$button.disabled = true;
+			} else {
+				$button.disabled = false;
+			}
+		}
+
+		//]]>
 	</script>
 <?php
+	}
+
+	/**
+	 * Sanitizes the checkbox field.
+	 */
+	public function sanitize_callback( $input, $fields, $post, $obj ) {
+		if ( ! wp_http_validate_url( site_url('/feed/') . $input['feed_name'] ) ) {
+			wp_die( "Invalid Feed Name" );
+		}
 	}
 }
