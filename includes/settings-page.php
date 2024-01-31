@@ -31,7 +31,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 		$this->fields['feed_name'] = [
 			'name' => 'feed_name',
 			'title' => 'Feed Name',
-			'description' => 'Keep this name simple as it is used to forms your this feed URL. The feed will be available at ' . site_url('/feed/'),
+			'description' => 'Keep this name simple as it is used to form the feed URL. The feed will be available at ' . site_url('/feed/'),
 			'type' => 'text',
 			'pattern' => '^[a-zA-Z0-9_]*$',
 			'default' => 'ticker',
@@ -42,8 +42,8 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 
 		$this->fields['ap_config_section'] = [
 			'name' => 'ap_config_section',
-			'title' => 'Associated Press API Configuration',
-			'description' => 'Settings for AP News feed.',
+			'title' => 'Associated Press Media API',
+			'description' => 'Settings for <a href="https://api.ap.org/media/v/docs/index.html#t=Getting_Started_API.htm" target="_blank" rel="noopener noreferrer" >AP Media API</a>. Requires an <a href="https://newsroom.ap.org/mediaapi/" target="_blank" rel="noopener noreferrer" >AP Newsroom</a> account.',
 			'type' => 'section'
 		];
 
@@ -57,7 +57,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 		$this->fields['ap_productid'] = [
 			'name' => 'ap_productid',
 			'title' => 'AP product ID',
-			'description' => 'AP product ID.',
+			'description' => 'To find available product ids: log into AP Newsroom, go to AP Media API and they listed under <a href="https://newsroom.ap.org/mediaapi/entitlements" target="_blank" rel="noopener noreferrer" >Entitlements</a>.',
 			'type' => 'text',
 			'class' => 'ap-input',
 			'section' => 'ap_config_section'
@@ -66,7 +66,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 		$this->fields['ap_api_key'] = [
 			'name' => 'ap_api_key',
 			'title' => 'API key',
-			'description' => 'Key to send for API auth.',
+			'description' => 'To find your access key: log into AP Newsroom, go to <a href="https://newsroom.ap.org/mediaapi/" target="_blank" rel="noopener noreferrer" >AP Media API</a> and click <b>See my API keys</b>.',
 			'type' => 'text',
 			'class' => 'ap-input regular-text',
 			'section' => 'ap_config_section',

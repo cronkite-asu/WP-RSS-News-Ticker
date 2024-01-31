@@ -360,7 +360,7 @@ abstract class Settings {
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo wp_kses_post( $args['description'] ); ?></p>
 			<?php
 		}
 	}
@@ -404,7 +404,7 @@ abstract class Settings {
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo wp_kses_post( $args['description'] ); ?></p>
 			<?php
 		}
 	}
@@ -450,7 +450,7 @@ abstract class Settings {
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo wp_kses_post( $args['description'] ); ?></p>
 			<?php
 		}
 	}
@@ -483,7 +483,7 @@ abstract class Settings {
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo wp_kses_post( $args['description'] ); ?></p>
 			<?php
 		}
 	}
@@ -533,7 +533,7 @@ abstract class Settings {
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo wp_kses_post( $args['description'] ); ?></p>
 			<?php
 		}
 	}
