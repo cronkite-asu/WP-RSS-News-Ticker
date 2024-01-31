@@ -107,8 +107,6 @@ class Rssnewsticker {
 	 */
 	private function define_admin_hooks() {
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ));
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ));
 	}
 
 	/**
@@ -120,8 +118,6 @@ class Rssnewsticker {
 	 */
 	private function define_public_hooks() {
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_public_styles' ));
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_public_scripts' ));
 		add_action('init', array( $this, 'add_rss_feed'));
 	}
 
@@ -144,50 +140,6 @@ class Rssnewsticker {
 	 */
 	public function get_version() {
 		return $this->version;
-	}
-
-	/**
-	 * Register the stylesheets for the admin area.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_admin_styles() {
-
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/rssnewsticker-admin.css', [], $this->version, 'all' );
-
-	}
-
-	/**
-	 * Register the JavaScript for the admin area.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_admin_scripts() {
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/rssnewsticker-admin.js', [ 'jquery', 'wp-util' ], $this->version, true );
-
-	}
-
-	/**
-	 * Register the stylesheets for the public-facing side of the site.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_public_styles() {
-
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/rssnewsticker-public.css', [], $this->version, 'all' );
-
-	}
-
-	/**
-	 * Register the JavaScript for the public-facing side of the site.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_public_scripts() {
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/rssnewsticker-public.js', [ 'jquery' ], $this->version, true );
-
 	}
 
 	public function add_rss_feed() {
@@ -228,8 +180,6 @@ class Rssnewsticker {
 
 	public function fetch_local_headlines() {
 		$text = $this->ticker->get_option('ticker_text');
-
-		#$lines = explode(PHP_EOL, $text);
 
 		return $text;
 	}
