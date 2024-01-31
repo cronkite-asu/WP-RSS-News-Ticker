@@ -323,7 +323,15 @@ abstract class Settings {
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
 		$pattern = $args['pattern'] ?? '';
 		?>
-			<input type="text" id="<?php echo esc_attr( $args['name'] ); ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" <?php if ( ! empty( $args['pattern'] ) ) { ?> pattern="<?php echo esc_attr( $pattern ); ?>"<?php } ?> />
+		<input
+			type="text" id="<?php echo esc_attr( $args['name'] ); ?>-input"
+			class="<?php echo esc_attr( $class ); ?>"
+			name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"
+			value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>"
+<?php if ( ! empty( $args['pattern'] ) ) { ?>
+			pattern="<?php echo esc_attr( $pattern ); ?>"
+<?php } ?>
+		/>
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
@@ -350,7 +358,8 @@ abstract class Settings {
 			id="<?php echo esc_attr( $args['name'] ); ?>-textarea"
 			rows="<?php echo esc_attr( $rows ); ?>"
 			cols="<?php echo esc_attr( $cols ); ?>"
-			class="<?php echo esc_attr( $class ); ?>"><?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?></textarea>
+			class="<?php echo esc_attr( $class ); ?>"><?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>
+		</textarea>
 
 		<?php
 		if ( ! empty( $args['description'] ) ) {
@@ -372,7 +381,15 @@ abstract class Settings {
 		$min = ! empty( $args['min'] ) ? $args['min'] : '';
 		$max = ! empty( $args['max'] ) ? $args['max'] : '';
 		?>
-		<input type="number" id="<?php echo esc_attr( $args['name'] ); ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" min="<?php echo esc_attr( $min ); ?>" max="<?php echo esc_attr( $max ); ?>" />
+		<input
+			type="number"
+			id="<?php echo esc_attr( $args['name'] ); ?>-input"
+			class="<?php echo esc_attr( $class ); ?>"
+			name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"
+			value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>"
+			min="<?php echo esc_attr( $min ); ?>"
+			max="<?php echo esc_attr( $max ); ?>"
+		/>
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
@@ -391,7 +408,12 @@ abstract class Settings {
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
 		?>
-		<input type="checkbox" id="<?php echo esc_attr( $args['name'] ); ?>-input" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" <?php checked( $this->get_option( $args['name'], $default ), 1, true ); ?> />
+		<input
+			type="checkbox" id="<?php echo esc_attr( $args['name'] ); ?>-input"
+			class="<?php echo esc_attr( $class ); ?>"
+			name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"
+			<?php checked( $this->get_option( $args['name'], $default ), 1, true ); ?>
+		/>
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
@@ -410,8 +432,21 @@ abstract class Settings {
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
 		$choices = ! empty( $args['choices'] ) ? $args['choices'] : [];
+		$size = ! empty( $args['size'] ) ? $args['size'] : '';
+		$choices = ! empty( $args['choices'] ) ? $args['choices'] : [];
 		?>
-		<select id="<?php echo esc_attr( $args['name'] ); ?>-select" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>" value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>" min="<?php echo esc_attr( $min ); ?>" max="<?php echo esc_attr( $max ); ?>" />
+		<select
+			id="<?php echo esc_attr( $args['name'] ); ?>-select"
+			class="<?php echo esc_attr( $class ); ?>"
+			name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"
+			value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>"
+<?php if ( ! empty( $args['size'] ) ) { ?>
+			size="<?php echo esc_attr( $size ); ?>"
+<?php } ?>
+<?php if ( $args['multiple'] ) { ?>
+			multiple
+<?php } ?>
+		/>
 		<?php foreach ( $choices as $choice_v => $label ) { ?>
 			<option value="<?php echo esc_attr( $choice_v ); ?>" <?php selected( $choice_v, $value, true ); ?>><?php echo esc_html( $label ); ?></option>
 		<?php } ?>
