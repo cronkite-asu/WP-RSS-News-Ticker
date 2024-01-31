@@ -36,7 +36,7 @@ class SettingsTicker extends Settings {
 			'type' => 'array',
 			'section' => 'ticker_custom_section',
 			'class' => 'widefat',
-			'default' => [ 'Welcome to the Walter Cronkite School of Journalism and Mass Communication' ],
+			'default' => [ 'Welcome to '. get_bloginfo( 'name' ) ],
 		];
 	}
 
