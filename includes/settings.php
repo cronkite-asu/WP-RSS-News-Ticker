@@ -32,6 +32,16 @@ abstract class Settings {
 	/**
 	 * @var string
 	 */
+	protected $capability = 'manage_options';
+
+	/**
+	 * @var string
+	 */
+	protected $slug = '_settings_page';
+
+	/**
+	 * @var string
+	 */
 	protected $icon_url = '';
 
 	/**
@@ -68,8 +78,8 @@ abstract class Settings {
 				$this->parent_menu,			// $parent_slug
 				$this->page_title,			// $page_title
 				$this->menu_title ?: $this->page_title,	// $menu_title
-				'manage_options',			// $capability
-				$this->id . '_settings_page',		// $menu_slug
+				$this->capability,			// $capability
+				$this->id . $this->slug,		// $menu_slug
 				[ $this, 'render_page'],		// $callback
 				$this->position				// $position
 			);
@@ -77,8 +87,8 @@ abstract class Settings {
 			$settings_page = add_menu_page(
 				$this->page_title,			// $page_title
 				$this->menu_title ?: $this->page_title,	// $menu_title
-				'manage_options',			// $capability
-				$this->id . '_settings_page',		// $menu_slug
+				$this->capability,			// $capability
+				$this->id . $this->slug,		// $menu_slug
 				[ $this, 'render_page'],		// $callback
 				$this->icon_url,			// $icon_url
 				$this->position				// $position
