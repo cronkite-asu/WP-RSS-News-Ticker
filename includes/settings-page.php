@@ -33,6 +33,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			'title' => 'Feed Name',
 			'description' => 'Keep this name simple as it is used to forms your this feed URL. The feed will be available at ' . site_url('/feed/'),
 			'type' => 'text',
+			'pattern' => '^[a-zA-Z0-9_]*$',
 			'default' => 'ticker',
 			'section' => 'feed_config_section',
 			'required' => true
@@ -155,14 +156,9 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 
 			$feedNameInput.on("change keyup paste", function() {
 
-				var regEx = /^[a-zA-Z0-9._-]{0,63}$/;
+				var regEx = /^[a-zA-Z0-9_]{0,63}$/;
 
-				if (!regEx.test($(this).val())) {
-					outputErrorMessage($(this),
-					'<p class="errorMessage">Enter a valid path.</p>');
-				} else {
-					$(this).removeClass('errorField');
-					$(this).next(".errorMessage").remove();
+				if (regEx.test($(this).val())) {
 					updateLastText('feed_name-description',$(this).val());
 				}
 			});
