@@ -34,7 +34,8 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			'description' => 'Keep this name simple as it is used to forms your this feed URL. The feed will be available at ' . site_url('/feed/'),
 			'type' => 'text',
 			'default' => 'ticker',
-			'section' => 'feed_config_section'
+			'section' => 'feed_config_section',
+			'required' => true
 		];
 
 		$this->fields['ap_config_section'] = [
@@ -66,7 +67,8 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			'description' => 'Key to send for API auth.',
 			'type' => 'text',
 			'class' => 'ap-input regular-text',
-			'section' => 'ap_config_section'
+			'section' => 'ap_config_section',
+			'autocomplete' => 'off'
 		];
 
 		$this->fields['ap_page_size'] = [
