@@ -36,7 +36,8 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			'pattern' => '^[a-zA-Z0-9_]*$',
 			'default' => 'ticker',
 			'section' => 'feed_config_section',
-			'required' => true
+			'required' => true,
+			'tooltip' => 'Use the letters A – Z (both uppercase and lowercase), the numbers 0 – 9, and the underscore "_"',
 		];
 
 		$this->fields['ap_config_section'] = [
@@ -156,7 +157,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 
 			$feedNameInput.on("change keyup paste", function() {
 
-				var regEx = /^[a-zA-Z0-9_]{0,63}$/;
+				var regEx = /^[a-zA-Z0-9_]{0,27}$/;
 
 				if (regEx.test($(this).val())) {
 					updateLastText('feed_name-description',$(this).val());

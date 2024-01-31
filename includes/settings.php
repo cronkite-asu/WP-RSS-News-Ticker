@@ -328,6 +328,7 @@ abstract class Settings {
 		$pattern = $args['pattern'] ?? '';
 		$placeholder = $args['placeholder'] ?? '';
 		$required = $args['required'] ?? false;
+		$tooltip = $args['tooltip'] ?? '';
 		?>
 		<input
 			type="text" id="<?php echo esc_attr( $name ); ?>-input"
@@ -352,6 +353,9 @@ abstract class Settings {
 <?php if ( $required ) { ?>
 			required
 <?php } ?>
+<?php if ( ! empty( $tooltip ) ) { ?>
+			title="<?php echo esc_attr( $tooltip ); ?>"
+<?php } ?>
 		/>
 		<?php
 		if ( ! empty( $args['description'] ) ) {
@@ -375,6 +379,7 @@ abstract class Settings {
 		$rows = $args['rows'] ?? '4';
 		$cols = $args['cols'] ?? '50';
 		$required = $args['required'] ?? false;
+		$tooltip = $args['tooltip'] ?? '';
 		?>
 		<textarea
 			type="text"
@@ -388,6 +393,9 @@ abstract class Settings {
 <?php } ?>
 <?php if ( $required ) { ?>
 			required
+<?php } ?>
+<?php if ( ! empty( $tooltip ) ) { ?>
+			title="<?php echo esc_attr( $tooltip ); ?>"
 <?php } ?>
 			>
 			<?php echo esc_attr( $this->get_option( $name, $default ) ); ?>
@@ -416,6 +424,7 @@ abstract class Settings {
 		$max = ! empty( $args['max'] ) ? $args['max'] : '';
 		$placeholder = $args['placeholder'] ?? '';
 		$required = $args['required'] ?? false;
+		$tooltip = $args['tooltip'] ?? '';
 		?>
 		<input
 			type="number"
@@ -433,6 +442,9 @@ abstract class Settings {
 <?php } ?>
 <?php if ( $required ) { ?>
 			required
+<?php } ?>
+<?php if ( ! empty( $tooltip ) ) { ?>
+			title="<?php echo esc_attr( $tooltip ); ?>"
 <?php } ?>
 		/>
 		<?php
@@ -454,6 +466,7 @@ abstract class Settings {
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
 		$required = $args['required'] ?? false;
+		$tooltip = $args['tooltip'] ?? '';
 		?>
 		<input
 			type="checkbox" id="<?php echo esc_attr( $name ); ?>-input"
@@ -461,6 +474,9 @@ abstract class Settings {
 			name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"
 <?php if ( $required ) { ?>
 			required
+<?php } ?>
+<?php if ( ! empty( $tooltip ) ) { ?>
+			title="<?php echo esc_attr( $tooltip ); ?>"
 <?php } ?>
 			<?php checked( $this->get_option( $name, $default ), 1, true ); ?>
 		/>
@@ -487,6 +503,7 @@ abstract class Settings {
 		$size = ! empty( $args['size'] ) ? $args['size'] : '';
 		$choices = ! empty( $args['choices'] ) ? $args['choices'] : [];
 		$required = $args['required'] ?? false;
+		$tooltip = $args['tooltip'] ?? '';
 		?>
 		<select
 			id="<?php echo esc_attr( $name ); ?>-select"
@@ -504,6 +521,9 @@ abstract class Settings {
 <?php } ?>
 <?php if ( $required ) { ?>
 			required
+<?php } ?>
+<?php if ( ! empty( $tooltip ) ) { ?>
+			title="<?php echo esc_attr( $tooltip ); ?>"
 <?php } ?>
 		/>
 		<?php foreach ( $choices as $choice_v => $label ) { ?>
