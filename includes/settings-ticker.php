@@ -10,8 +10,8 @@ class SettingsTicker extends Settings {
 
 	public function __construct() {
 		$this->id = 'cronkiteticker';
-		$this->page_title = 'Cronkite Ticker';
-		$this->menu_title = 'Cronkite Ticker';
+		$this->page_title = 'RSS Ticker';
+		$this->menu_title = 'RSS Ticker';
 		$this->icon_url = 'dashicons-rss';
 		$this->position = 30;
 		$this->submit_args = [null, 'large', 'submit', false, null];
@@ -23,9 +23,9 @@ class SettingsTicker extends Settings {
 
 	protected function define_fields() {
 		$this->fields['ticker_config_section'] = [
-			'name' => 'ticker_config_section',
-			'title' => 'Ticker Configuration',
-			'description' => 'Settings for the RSS Ticker feed.',
+			'name' => 'ticker_custom_section',
+			'title' => 'Custom Ticker Feed',
+			'description' => 'Custom news items display on the ticker.',
 			'type' => 'section'
 		];
 
@@ -34,7 +34,7 @@ class SettingsTicker extends Settings {
 			'title' => 'Ticker Text',
 			'description' => 'Custom text to display on the news ticker.',
 			'type' => 'array',
-			'section' => 'ticker_config_section',
+			'section' => 'ticker_custom_section',
 			'class' => 'widefat',
 			'default' => [ 'Welcome to the Walter Cronkite School of Journalism and Mass Communication' ],
 		];

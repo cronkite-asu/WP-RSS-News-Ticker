@@ -10,9 +10,9 @@ class SettingsPage extends Settings {
 
 	public function __construct() {
 		$this->id = 'rssnewsticker';
-		$this->page_title = 'Ticker Feed';
+		$this->page_title = 'RSS Ticker';
 		$this->parent_menu = 'options-general.php';
-		$this->menu_title = 'Ticker';
+		$this->menu_title = 'RSS Ticker';
 
 		$this->define_fields();
 add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 10, 4 );
@@ -23,7 +23,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 	protected function define_fields() {
 		$this->fields['feed_config_section'] = [
 			'name' => 'feed_config_section',
-			'title' => 'Feed Configuration',
+			'title' => 'RSS Feed Configuration',
 			'description' => 'Settings for the RSS feed.',
 			'type' => 'section'
 		];
@@ -39,7 +39,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 
 		$this->fields['ap_config_section'] = [
 			'name' => 'ap_config_section',
-			'title' => 'AP Configuration',
+			'title' => 'Associated Press API Configuration',
 			'description' => 'Settings for AP News feed.',
 			'type' => 'section'
 		];
