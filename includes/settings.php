@@ -319,23 +319,44 @@ abstract class Settings {
 	 * @return void
 	 */
 	public function render_text( $args ) {
+		$name = $args['name'];
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
+		$autocomplete = $args['autocomplete'] ?? '';
+		$maxlength = $args['maxlength'] ?? '';
+		$minlength = $args['minlength'] ?? '';
 		$pattern = $args['pattern'] ?? '';
+		$placeholder = $args['placeholder'] ?? '';
+		$required = $args['required'] ?? false;
 		?>
 		<input
-			type="text" id="<?php echo esc_attr( $args['name'] ); ?>-input"
+			type="text" id="<?php echo esc_attr( $name ); ?>-input"
 			class="<?php echo esc_attr( $class ); ?>"
-			name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"
-			value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>"
-<?php if ( ! empty( $args['pattern'] ) ) { ?>
+			name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"
+			value="<?php echo esc_attr( $this->get_option( $name, $default ) ); ?>"
+<?php if ( ! empty( $autocomplete ) ) { ?>
+			autocomplete="<?php echo esc_attr( $autocomplete ); ?>"
+<?php } ?>
+<?php if ( ! empty( $maxlength ) ) { ?>
+			maxlength="<?php echo esc_attr( $maxlength ); ?>"
+<?php } ?>
+<?php if ( ! empty( $minlength ) ) { ?>
+			minlength="<?php echo esc_attr( $minlength ); ?>"
+<?php } ?>
+<?php if ( ! empty( $pattern ) ) { ?>
 			pattern="<?php echo esc_attr( $pattern ); ?>"
+<?php } ?>
+<?php if ( ! empty( $placeholder ) ) { ?>
+			placeholder="<?php echo esc_attr( $placeholder ); ?>"
+<?php } ?>
+<?php if ( $required ) { ?>
+			required
 <?php } ?>
 		/>
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p id="<?php echo esc_attr( $args['name'] ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 			<?php
 		}
 	}
@@ -347,24 +368,35 @@ abstract class Settings {
 	 * @return void
 	 */
 	public function render_textarea( $args ) {
+		$name = $args['name'];
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
+		$autocomplete = $args['autocomplete'] ?? '';
 		$rows = $args['rows'] ?? '4';
 		$cols = $args['cols'] ?? '50';
+		$required = $args['required'] ?? false;
 		?>
 		<textarea
 			type="text"
-			name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"
-			id="<?php echo esc_attr( $args['name'] ); ?>-textarea"
+			name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"
+			id="<?php echo esc_attr( $name ); ?>-textarea"
 			rows="<?php echo esc_attr( $rows ); ?>"
 			cols="<?php echo esc_attr( $cols ); ?>"
-			class="<?php echo esc_attr( $class ); ?>"><?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>
+			class="<?php echo esc_attr( $class ); ?>"
+<?php if ( ! empty( $autocomplete ) ) { ?>
+			autocomplete="<?php echo esc_attr( $autocomplete ); ?>"
+<?php } ?>
+<?php if ( $required ) { ?>
+			required
+<?php } ?>
+			>
+			<?php echo esc_attr( $this->get_option( $name, $default ) ); ?>
 		</textarea>
 
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p id="<?php echo esc_attr( $args['name'] ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 			<?php
 		}
 	}
@@ -376,24 +408,37 @@ abstract class Settings {
 	 * @return void
 	 */
 	public function render_number( $args ) {
+		$name = $args['name'];
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
+		$autocomplete = $args['autocomplete'] ?? '';
 		$min = ! empty( $args['min'] ) ? $args['min'] : '';
 		$max = ! empty( $args['max'] ) ? $args['max'] : '';
+		$placeholder = $args['placeholder'] ?? '';
+		$required = $args['required'] ?? false;
 		?>
 		<input
 			type="number"
-			id="<?php echo esc_attr( $args['name'] ); ?>-input"
+			id="<?php echo esc_attr( $name ); ?>-input"
 			class="<?php echo esc_attr( $class ); ?>"
-			name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"
-			value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>"
+			name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"
+			value="<?php echo esc_attr( $this->get_option( $name, $default ) ); ?>"
 			min="<?php echo esc_attr( $min ); ?>"
 			max="<?php echo esc_attr( $max ); ?>"
+<?php if ( ! empty( $autocomplete ) ) { ?>
+			autocomplete="<?php echo esc_attr( $autocomplete ); ?>"
+<?php } ?>
+<?php if ( ! empty( $placeholder ) ) { ?>
+			placeholder="<?php echo esc_attr( $placeholder ); ?>"
+<?php } ?>
+<?php if ( $required ) { ?>
+			required
+<?php } ?>
 		/>
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p id="<?php echo esc_attr( $args['name'] ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 			<?php
 		}
 	}
@@ -405,19 +450,24 @@ abstract class Settings {
 	 * @return void
 	 */
 	public function render_checkbox( $args ) {
+		$name = $args['name'];
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
+		$required = $args['required'] ?? false;
 		?>
 		<input
-			type="checkbox" id="<?php echo esc_attr( $args['name'] ); ?>-input"
+			type="checkbox" id="<?php echo esc_attr( $name ); ?>-input"
 			class="<?php echo esc_attr( $class ); ?>"
-			name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"
-			<?php checked( $this->get_option( $args['name'], $default ), 1, true ); ?>
+			name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"
+<?php if ( $required ) { ?>
+			required
+<?php } ?>
+			<?php checked( $this->get_option( $name, $default ), 1, true ); ?>
 		/>
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p id="<?php echo esc_attr( $args['name'] ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 			<?php
 		}
 	}
@@ -429,22 +479,31 @@ abstract class Settings {
 	 * @return void
 	 */
 	public function render_select( $args ) {
+		$name = $args['name'];
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
+		$autocomplete = $args['autocomplete'] ?? '';
 		$choices = ! empty( $args['choices'] ) ? $args['choices'] : [];
 		$size = ! empty( $args['size'] ) ? $args['size'] : '';
 		$choices = ! empty( $args['choices'] ) ? $args['choices'] : [];
+		$required = $args['required'] ?? false;
 		?>
 		<select
-			id="<?php echo esc_attr( $args['name'] ); ?>-select"
+			id="<?php echo esc_attr( $name ); ?>-select"
 			class="<?php echo esc_attr( $class ); ?>"
-			name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"
-			value="<?php echo esc_attr( $this->get_option( $args['name'], $default ) ); ?>"
+			name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"
+			value="<?php echo esc_attr( $this->get_option( $name, $default ) ); ?>"
+<?php if ( ! empty( $autocomplete ) ) { ?>
+			autocomplete="<?php echo esc_attr( $autocomplete ); ?>"
+<?php } ?>
 <?php if ( ! empty( $args['size'] ) ) { ?>
 			size="<?php echo esc_attr( $size ); ?>"
 <?php } ?>
 <?php if ( $args['multiple'] ) { ?>
 			multiple
+<?php } ?>
+<?php if ( $required ) { ?>
+			required
 <?php } ?>
 		/>
 		<?php foreach ( $choices as $choice_v => $label ) { ?>
@@ -454,7 +513,7 @@ abstract class Settings {
 		<?php
 		if ( ! empty( $args['description'] ) ) {
 			?>
-			<p id="<?php echo esc_attr( $args['name'] ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
+			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo esc_html( $args['description'] ); ?></p>
 			<?php
 		}
 	}
