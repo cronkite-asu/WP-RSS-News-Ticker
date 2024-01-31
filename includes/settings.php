@@ -65,22 +65,23 @@ abstract class Settings {
 	public function register_page() {
 		if ( $this->parent_menu ) {
 			$settings_page = add_submenu_page(
-				$this->parent_menu,
-				$this->page_title,
-				$this->menu_title ?: $this->page_title,
-				'manage_options',
-				$this->id . '_settings_page',
-				[ $this, 'render_page']
+				$this->parent_menu,			// $parent_slug
+				$this->page_title,			// $page_title
+				$this->menu_title ?: $this->page_title,	// $menu_title
+				'manage_options',			// $capability
+				$this->id . '_settings_page',		// $menu_slug
+				[ $this, 'render_page'],		// $callback
+				$this->position				// $position
 			);
 		} else {
 			$settings_page = add_menu_page(
-				$this->page_title,
-				$this->menu_title ?: $this->page_title,
-				'manage_options',
-				$this->id . '_settings_page',
-				[ $this, 'render_page'],
-				$this->icon_url,
-				$this->position
+				$this->page_title,			// $page_title
+				$this->menu_title ?: $this->page_title,	// $menu_title
+				'manage_options',			// $capability
+				$this->id . '_settings_page',		// $menu_slug
+				[ $this, 'render_page'],		// $callback
+				$this->icon_url,			// $icon_url
+				$this->position				// $position
 			);
 		}
 
@@ -167,30 +168,28 @@ abstract class Settings {
 		$fields = $this->get_fields();
 
 		register_setting(
-			$this->id . '_settings_page',
-			$this->id . '_options',
-			[
-				'sanitize_callback' => [ $this, 'sanitize' ]
-			]
+			$this->id . '_settings_page',				// $option_group
+			$this->id . '_options',					// $option_name
+			[ 'sanitize_callback' => [ $this, 'sanitize' ] ]	// $args
 		);
 
 		foreach ( $fields as $field ) {
 			if ( 'section' === $field['type'] ) {
 				add_settings_section(
-					$this->id . '_' . $field['name'] . '_section',
-					$field['title'],
-					[ $this, 'render_section' ],
-					$this->id . '_settings_page',
-					$field
+					$this->id . '_' . $field['name'] . '_section',	// $id
+					$field['title'],				// $title
+					[ $this, 'render_section' ],			// $callback
+					$this->id . '_settings_page',			// $page
+					$field						// $args
 				);
 			} else {
 				add_settings_field(
-					$this->id . '_' . $field['name'],
-					$field['title'],
-					[ $this, 'render_field' ],
-					$this->id . '_settings_page',
-					$this->id . '_' . $field['section'] . '_section',
-					$field
+					$this->id . '_' . $field['name'],			// $id
+					$field['title'],					// $title
+					[ $this, 'render_field' ],				// $callback
+					$this->id . '_settings_page',				// $page
+					$this->id . '_' . $field['section'] . '_section',	// $section
+					$field							// $args
 				);
 			}
 		}
