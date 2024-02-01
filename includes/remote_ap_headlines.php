@@ -33,12 +33,6 @@ class RemoteAPHeadlines extends RemoteJSON {
 	protected $page_size = "";
 
 	/**
-	* Headlines returned by the request
-	* @var array
-	*/
-	protected $headlines = array();
-
-	/**
 	* Creating the object
 	* @param string $url
 	* @param array  $array
@@ -78,18 +72,6 @@ class RemoteAPHeadlines extends RemoteJSON {
 		return $headers;
 	}
 
-	/**
-	* Run the main method run() and prepare the headlines.
-	**/
-	public function run() {
-		parent::run();
-		$this->headlines = $this->parse_ap_headlines($this->body);
-	}
-
-	public function get_ap_headlines() {
-		return $this->headlines;
-	}
-
 	protected function parse_ap_headlines($json) {
 		$obj = json_decode($json);
 		$items = $obj->data->items;
@@ -98,5 +80,25 @@ class RemoteAPHeadlines extends RemoteJSON {
 			array_push($lines, $item->item->headline);
 		}
 		return $lines;
+	}
+
+	/**
+	 * Get transient key
+	 */
+	protected function get_transient_key() {
+		return 'remote-ap-headlines-' . md5( $this->url );
+	}
+
+	public function get_ap_headlines() {
+		$headlines = get_transient( $this->get_transient_key() );
+
+		if ( false === $headlines ) {
+			$this->run();
+
+			$headlines = $this->parse_ap_headlines($this->body);
+			set_transient( $this->get_transient_key(), $headlines, 5*MINUTE_IN_SECONDS );
+		}
+
+		return $headlines;
 	}
 }
