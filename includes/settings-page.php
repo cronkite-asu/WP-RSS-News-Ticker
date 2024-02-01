@@ -33,6 +33,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			'title' => 'Feed Name',
 			'description' => 'Keep this name simple as it is used to form the feed URL. The feed will be available at ' . site_url('/feed/'),
 			'type' => 'text',
+			'maxlength' => 32,
 			'pattern' => '^[a-zA-Z0-9_]*$',
 			'default' => 'ticker',
 			'section' => 'feed_config_section',
@@ -59,8 +60,11 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			'title' => 'AP product ID',
 			'description' => 'To find available product ids: log into AP Newsroom, go to AP Media API and they listed under <a href="https://newsroom.ap.org/mediaapi/entitlements" target="_blank" rel="noopener noreferrer" >Entitlements</a>.',
 			'type' => 'text',
+			'maxlength' => 8,
+			'pattern' => '^[0-9]*$',
 			'class' => 'ap-input',
-			'section' => 'ap_config_section'
+			'section' => 'ap_config_section',
+			'tooltip' => 'This field only allows the numbers 0 – 9',
 		];
 
 		$this->fields['ap_api_key'] = [
@@ -68,9 +72,12 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			'title' => 'API key',
 			'description' => 'To find your access key: log into AP Newsroom, go to <a href="https://newsroom.ap.org/mediaapi/" target="_blank" rel="noopener noreferrer" >AP Media API</a> and click <b>See my API keys</b>.',
 			'type' => 'text',
+			'maxlength' => 32,
+			'pattern' => '^[a-z0-9]*$',
 			'class' => 'ap-input regular-text',
 			'section' => 'ap_config_section',
-			'autocomplete' => 'off'
+			'autocomplete' => 'off',
+			'tooltip' => 'This field only allows a – z (lowercase), and the numbers 0 – 9',
 		];
 
 		$this->fields['ap_page_size'] = [
@@ -101,32 +108,7 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 	 */
 	public function enqueue_scripts( $hook_suffix ){
 		$page_hook_id = $this->get_hook_suffix();
-		add_action( "admin_head-{$page_hook_id}", [ $this, 'head_scripts' ] );
 		add_action( "admin_footer-{$page_hook_id}", [ $this, 'footer_scripts' ] );
-	}
-
-	/**
-	 * Head Scripts:
-	 * @since 1.0.0
-	 */
-	public function head_scripts(){
-	?>
-
-		<style type="text/css">
-			input[type=text] + p.errorMessage {
-				display: inline;
-				margin-left: 5px;
-			}
-
-			.errorField {
-				border: 1px solid red;
-			}
-
-			.errorMessage {
-				color: red;
-			}
-		</style>
-<?php
 	}
 
 	/**
@@ -163,46 +145,6 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 					updateLastText('feed_name-description',$(this).val());
 				}
 			});
-
-			$apProductIDInput.on("change keyup paste", function() {
-
-				if (isNaN($(this).val())) {
-					outputErrorMessage($(this),
-					'<p class="errorMessage">Enter a valid product ID.</p>');
-				} else {
-					$(this).removeClass('errorField');
-					$(this).next(".errorMessage").remove();
-				}
-			});
-
-			$apAPIKeyInput.on("change keyup paste", function() {
-
-				var regEx = /^[a-z0-9._-]{0,28}$/;
-
-				if (!regEx.test($(this).val())) {
-					outputErrorMessage($(this),
-					'<p class="errorMessage">Enter a valid API key.</p>');
-				} else {
-					$(this).removeClass('errorField');
-					$(this).next(".errorMessage").remove();
-				}
-			});
-
-			$apPreFeedInput.on("change keyup paste", function() {
-
-				if ($.trim( $(this).val() ) == '') {
-					outputErrorMessage($(this),
-					'<p class="errorMessage">Please fill in text.</p>');
-				} else {
-					$(this).removeClass('errorField');
-					$(this).next(".errorMessage").remove();
-				}
-			});
-
-			// listen for any input and update the submit button
-			$( "body" ).on( "change keyup paste", "input", function( event ) {
-				updateButton('submit', "errorMessage");
-			});
 		});
 
 		function updateLastText($id, $text) {
@@ -221,34 +163,11 @@ add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 1
 			}
 		}
 
-		function outputErrorMessage($inputField, $errorMessage) {
-			// If there is a previous message
-			if ($inputField.next().hasClass( "errorMessage" )) {
-				// Remove the previous message
-				$inputField.next(".errorMessage").remove();
-			} // end if
-
-			// Show the error message
-			$inputField.after($errorMessage);
-			// 'Highlight' the field
-			$inputField.addClass('errorField');
-			$inputField.focus();
-		} // end function outputErrorMessage($inputField, $errorMessage)
-
 		function updateAPInputs($enabled, $searchclass) {
 			const $list = document.getElementsByClassName($searchclass);
 			for (var $node of $list) {
 				// set each disabled with reverse of $enabled var
 				$node.readOnly = !$enabled;
-			}
-		}
-
-		function updateButton($id, $searchclass) {
-			const $button = document.getElementById($id);
-			if (document.getElementsByClassName($searchclass).length > 0) {
-				$button.disabled = true;
-			} else {
-				$button.disabled = false;
 			}
 		}
 
