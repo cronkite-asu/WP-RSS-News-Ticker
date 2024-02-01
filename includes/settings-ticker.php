@@ -37,6 +37,9 @@ class SettingsTicker extends Settings {
 			'section' => 'ticker_custom_section',
 			'class' => 'widefat',
 			'default' => [ 'Welcome to '. get_bloginfo( 'name' ) ],
+			'autocomplete' => 'off',
+			'required' => true,
+			'tooltip' => 'Enter a news item to display on the Ticker',
 		];
 	}
 
@@ -69,6 +72,13 @@ class SettingsTicker extends Settings {
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : [""];
 		$field_data = $this->get_option( $args['name'], $default );
+		$autocomplete = $args['autocomplete'] ?? '';
+		$maxlength = $args['maxlength'] ?? '';
+		$minlength = $args['minlength'] ?? '';
+		$pattern = $args['pattern'] ?? '';
+		$placeholder = $args['placeholder'] ?? '';
+		$required = $args['required'] ?? false;
+		$tooltip = $args['tooltip'] ?? '';
 
 		/* Repeater Text Input */
 		if ( ! empty( $args['description'] ) ) {
@@ -82,7 +92,33 @@ class SettingsTicker extends Settings {
 		<div id="<?php echo esc_attr( $args['name'] ); ?>-field_data">
 			<?php foreach( $field_data as $i => $value ) { ?>
 			<div class="field-group">
-				<input type="text" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>[<?php echo $i; ?>]" value="<?php echo $value; ?>" />
+				<input
+					type="text"
+					class="<?php echo esc_attr( $class ); ?>"
+					name="<?php echo esc_attr( $this->get_option_key( $args['name'] ) ); ?>[<?php echo $i; ?>]"
+					value="<?php echo esc_attr( $value ); ?>"
+<?php if ( ! empty( $autocomplete ) ) { ?>
+					autocomplete="<?php echo esc_attr( $autocomplete ); ?>"
+<?php } ?>
+<?php if ( ! empty( $maxlength ) ) { ?>
+					maxlength="<?php echo esc_attr( $maxlength ); ?>"
+<?php } ?>
+<?php if ( ! empty( $minlength ) ) { ?>
+					minlength="<?php echo esc_attr( $minlength ); ?>"
+<?php } ?>
+<?php if ( ! empty( $pattern ) ) { ?>
+					pattern="<?php echo esc_attr( $pattern ); ?>"
+<?php } ?>
+<?php if ( ! empty( $placeholder ) ) { ?>
+					placeholder="<?php echo esc_attr( $placeholder ); ?>"
+<?php } ?>
+<?php if ( $required ) { ?>
+					required
+<?php } ?>
+<?php if ( ! empty( $tooltip ) ) { ?>
+					title="<?php echo esc_attr( $tooltip ); ?>"
+<?php } ?>
+				/>
 				<?php if ( $i != 0 ) { ?><button type="button" class="button button-small field-data-remove">X</button><?php } ?>
 			</div>
 			<?php } ?>
@@ -118,11 +154,44 @@ class SettingsTicker extends Settings {
 	public function footer_scripts( $args ){
 		$name = $args['name'];
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
+		$autocomplete = $args['autocomplete'] ?? '';
+		$maxlength = $args['maxlength'] ?? '';
+		$minlength = $args['minlength'] ?? '';
+		$pattern = $args['pattern'] ?? '';
+		$placeholder = $args['placeholder'] ?? '';
+		$required = $args['required'] ?? false;
+		$tooltip = $args['tooltip'] ?? '';
 	?>
 
 		<script type="text/html" id="tmpl-<?php echo esc_attr( $name ); ?>-repeater">
 			<div class="field-group">
-				<input type="text" class="<?php echo esc_attr( $class ); ?>" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>[]" value="" />
+				<input
+					type="text"
+					class="<?php echo esc_attr( $class ); ?>"
+					name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>[]"
+					value=""
+<?php if ( ! empty( $autocomplete ) ) { ?>
+					autocomplete="<?php echo esc_attr( $autocomplete ); ?>"
+<?php } ?>
+<?php if ( ! empty( $maxlength ) ) { ?>
+					maxlength="<?php echo esc_attr( $maxlength ); ?>"
+<?php } ?>
+<?php if ( ! empty( $minlength ) ) { ?>
+					minlength="<?php echo esc_attr( $minlength ); ?>"
+<?php } ?>
+<?php if ( ! empty( $pattern ) ) { ?>
+					pattern="<?php echo esc_attr( $pattern ); ?>"
+<?php } ?>
+<?php if ( ! empty( $placeholder ) ) { ?>
+					placeholder="<?php echo esc_attr( $placeholder ); ?>"
+<?php } ?>
+<?php if ( $required ) { ?>
+					required
+<?php } ?>
+<?php if ( ! empty( $tooltip ) ) { ?>
+					title="<?php echo esc_attr( $tooltip ); ?>"
+<?php } ?>
+				/>
 				<button type="button" class="button button-small field-data-remove">X</button>
 			</div>
 		</script>
