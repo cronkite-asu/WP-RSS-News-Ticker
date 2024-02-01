@@ -15,7 +15,7 @@ class SettingsPage extends Settings {
 		$this->menu_title = 'RSS Ticker';
 
 		$this->define_fields();
-add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 10, 4 );
+		add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 10, 4 );
 
 		parent::__construct();
 	}
