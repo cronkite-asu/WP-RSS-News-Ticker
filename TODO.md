@@ -3,7 +3,7 @@
 ### Todo
 
 - [ ] Cache Feed.
-  - [ ] Use tranisents to cache API calls.
+  - [x] Use tranisents to cache API calls.
   - [ ] Check if feed is updated with etag header
 - [ ] Add capablity to manage page tabs.
 - [ ] Add optional local feeds from news post types.
