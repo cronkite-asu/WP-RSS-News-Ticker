@@ -16,12 +16,12 @@
  */
 
 namespace Rssnewsticker;
-include_once 'includes/settings.php';
-include_once 'includes/settings-page.php';
-include_once 'includes/settings-ticker.php';
-include_once 'includes/remote.php';
-include_once 'includes/remote_json.php';
-include_once 'includes/remote_ap_headlines.php';
+include_once 'includes/class-settings.php';
+include_once 'includes/class-settings-page.php';
+include_once 'includes/class-settings-ticker.php';
+include_once 'includes/class-remote.php';
+include_once 'includes/class-remote-json.php';
+include_once 'includes/class-remote-ap-headlines.php';
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
