@@ -33,6 +33,12 @@ class RemoteAPHeadlines extends RemoteJSON {
 	protected $page_size = "";
 
 	/**
+	* Time to store headlines in trainsient to avoid remote requests in seconds
+	* @var integer
+	*/
+	protected $expiration = 5*MINUTE_IN_SECONDS;
+
+	/**
 	* Creating the object
 	* @param string $url
 	* @param array  $array
@@ -82,21 +88,15 @@ class RemoteAPHeadlines extends RemoteJSON {
 		return $lines;
 	}
 
-	/**
-	 * Get transient key
-	 */
-	protected function get_transient_key() {
-		return 'remote-ap-headlines-' . md5( $this->url );
-	}
-
 	public function get_ap_headlines() {
-		$headlines = get_transient( $this->get_transient_key() );
+		$transient_key = __FUNCTION__ . '_' . md5( $this->url );
+		$headlines = get_transient( $transient_key );
 
 		if ( false === $headlines ) {
 			$this->run();
 
 			$headlines = $this->parse_ap_headlines($this->body);
-			set_transient( $this->get_transient_key(), $headlines, 5*MINUTE_IN_SECONDS );
+			set_transient( $transient_key, $headlines, $this->expiration);
 		}
 
 		return $headlines;
