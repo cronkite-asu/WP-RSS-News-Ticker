@@ -225,7 +225,7 @@ class Rssnewsticker {
 		$headlines = [];
 
 		if ($enabled === 1) {
-			$remote_request = new RemoteAPHeadlines( $productid, $api_key, $page_size );
+			$remote_request = new RemoteAPHeadlines( $this->get_plugin_name(), $this->get_version(), $productid, $api_key, $page_size );
 			$headlines = $remote_request->get_ap_headlines();
 
 			array_unshift($headlines, $pre_feed);

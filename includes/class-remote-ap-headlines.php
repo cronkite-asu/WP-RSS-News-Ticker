@@ -44,13 +44,13 @@ class RemoteAPHeadlines extends RemoteJSON {
 	* @param array  $array
 	* @param string $method
 	*/
-	public function __construct( $productid, $api_key, $page_size = 5 ) {
+	public function __construct( $plugin_name, $version, $productid, $api_key, $page_size = 5 ) {
 		$this->productid = $productid;
 		$this->api_key = $api_key;
 		$this->page_size = $page_size;
 		$this->url = $this->build_url(self::ENDPOINT, array('q' => 'productid:' . $productid, 'include' => 'headline', 'in_my_plan' => 'true', 'page_size' => $page_size));
 		$this->arguments['headers'] = $this->build_headers();
-		parent::__construct($this->url, $this->arguments, "get");
+		parent::__construct($plugin_name, $version, $this->url, $this->arguments, "get");
 	}
 
 	/**
@@ -88,15 +88,25 @@ class RemoteAPHeadlines extends RemoteJSON {
 		return $lines;
 	}
 
+	/**
+	* Creating key to prefix transients
+	*
+	*/
+	public function get_transient_prefix() {
+		$prefix = $this->plugin_name . '_' . md5( $this->version . __CLASS__ . $this->url );
+
+		return $prefix;
+	}
+
 	public function get_ap_headlines() {
-		$transient_key = __FUNCTION__ . '_' . md5( $this->url );
-		$headlines = get_transient( $transient_key );
+		$transient_name = $this->get_transient_prefix() . __FUNCTION__;
+		$headlines = get_transient( $transient_name );
 
 		if ( false === $headlines ) {
 			$this->run();
 
 			$headlines = $this->parse_ap_headlines($this->body);
-			set_transient( $transient_key, $headlines, $this->expiration);
+			set_transient( $transient_name, $headlines, $this->expiration);
 		}
 
 		return $headlines;

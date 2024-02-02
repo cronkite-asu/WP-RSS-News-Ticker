@@ -9,6 +9,24 @@ if ( ! defined( 'WPINC' ) ) {
 class Remote {
 
 	/**
+	 * The ID of this plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $plugin_name    The ID of this plugin.
+	 */
+	protected $plugin_name;
+
+	/**
+	 * The version of this plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $version    The current version of this plugin.
+	 */
+	protected $version;
+
+	/**
 	 * Request method
 	 * @var string
 	 */
@@ -62,7 +80,9 @@ class Remote {
 	 * @param array  $array
 	 * @param string $method
 	 */
-	public function __construct( $url, $array = array(), $method = "get" ) {
+	public function __construct( $plugin_name, $version, $url, $array = array(), $method = "get" ) {
+		$this->plugin_name = $plugin_name;
+		$this->version = $version;
 		$this->method = strtoupper( $method );
 		$this->url = $url;
 		$this->arguments = $array;
