@@ -1,5 +1,5 @@
 <?php
-namespace Rssnewsticker;
+namespace ASU\CSJ\Rssnewsticker;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

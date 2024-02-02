@@ -15,7 +15,7 @@
  * Text Domain:       rssnewsticker
  */
 
-namespace ASU\CJS\Rssnewsticker;
+namespace ASU\CSJ\Rssnewsticker;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
