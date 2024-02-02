@@ -9,7 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
 class SettingsPage extends Settings {
 
 	public function __construct( $plugin_name, $version ) {
-		$this->id = 'rssnewsticker';
+		$this->id = $plugin_name;
 		$this->page_title = 'RSS Ticker';
 		$this->parent_menu = 'options-general.php';
 		$this->menu_title = 'RSS Ticker';

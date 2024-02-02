@@ -9,7 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
 class SettingsTicker extends Settings {
 
 	public function __construct( $plugin_name, $version ) {
-		$this->id = 'cronkiteticker';
+		$this->id = $plugin_name . '_local_feed';
 		$this->page_title = 'RSS Ticker';
 		$this->menu_title = 'RSS Ticker';
 		$this->icon_url = 'dashicons-rss';
