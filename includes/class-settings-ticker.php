@@ -8,7 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class SettingsTicker extends Settings {
 
-	public function __construct() {
+	public function __construct( $plugin_name, $version ) {
 		$this->id = 'cronkiteticker';
 		$this->page_title = 'RSS Ticker';
 		$this->menu_title = 'RSS Ticker';
@@ -18,7 +18,7 @@ class SettingsTicker extends Settings {
 
 		$this->define_fields();
 
-		parent::__construct();
+		parent::__construct( $plugin_name, $version );
 	}
 
 	protected function define_fields() {

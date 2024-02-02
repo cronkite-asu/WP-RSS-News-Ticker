@@ -67,7 +67,7 @@ abstract class Settings {
 	 */
 	protected $hook_suffix = '';
 
-	public function __construct() {
+	public function __construct( $plugin_name, $version ) {
 		add_action( 'admin_menu', [ $this, 'register_page' ] );
 		add_action( 'admin_init', [ $this, 'register_fields' ] );
 	}

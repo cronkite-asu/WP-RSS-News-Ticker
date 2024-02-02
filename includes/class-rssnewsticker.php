@@ -148,8 +148,8 @@ class Rssnewsticker {
 	 * @since    1.0.0
 	 */
 	public function run() {
-		$this->settings = new SettingsPage();
-		$this->ticker = new SettingsTicker();
+		$this->settings = new SettingsPage( $this->get_plugin_name(), $this->get_version() );
+		$this->ticker = new SettingsTicker( $this->get_plugin_name(), $this->get_version() );
 	}
 
 	/**

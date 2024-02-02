@@ -8,7 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class SettingsPage extends Settings {
 
-	public function __construct() {
+	public function __construct( $plugin_name, $version ) {
 		$this->id = 'rssnewsticker';
 		$this->page_title = 'RSS Ticker';
 		$this->parent_menu = 'options-general.php';
@@ -17,7 +17,7 @@ class SettingsPage extends Settings {
 		$this->define_fields();
 		add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 10, 4 );
 
-		parent::__construct();
+		parent::__construct( $plugin_name, $version );
 	}
 
 	protected function define_fields() {
