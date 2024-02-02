@@ -36,7 +36,7 @@ class RemoteAPHeadlines extends RemoteJSON {
 	* Time to store headlines in trainsient to avoid remote requests in seconds
 	* @var integer
 	*/
-	protected $expiration = 5*MINUTE_IN_SECONDS;
+	protected $expiration = 15*MINUTE_IN_SECONDS;
 
 	/**
 	* Creating the object
