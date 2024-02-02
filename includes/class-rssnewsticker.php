@@ -200,7 +200,7 @@ class Rssnewsticker {
 			$line = sanitize_text_field($line);
 ?>
 		<item>
-			<description><![CDATA[<?php echo wp_filter_nohtml_kses($line) ?>]]></description>
+			<description><![CDATA[<?php echo sanitize_text_field($line) ?>]]></description>
 <?php			do_action('rss2_item'); ?>
 		</item>
 <?php		}; ?>
