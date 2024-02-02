@@ -178,9 +178,9 @@ class Rssnewsticker {
 	}
 
 	public function render_rss_feed () {
-		$schoolnews = $this->fetch_local_headlines();
+		$localnews = $this->fetch_local_headlines();
 		$apnews = $this->fetch_ap_headlines();
-		$lines = array_merge($schoolnews, $apnews);
+		$lines = array_merge($localnews, $apnews);
 
 		define('DONOTCACHEPAGE', true);
 		header('Content-Type: application/rss+xml');
@@ -226,8 +226,6 @@ class Rssnewsticker {
 
 		if ($enabled === 1) {
 			$remote_request = new RemoteAPHeadlines( $productid, $api_key, $page_size );
-			$remote_request->run();
-
 			$headlines = $remote_request->get_ap_headlines();
 
 			array_unshift($headlines, $pre_feed);
