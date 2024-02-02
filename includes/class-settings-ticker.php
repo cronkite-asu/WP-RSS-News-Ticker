@@ -119,7 +119,7 @@ class SettingsTicker extends Settings {
 					title="<?php echo esc_attr( $tooltip ); ?>"
 <?php } ?>
 				/>
-				<?php if ( $i != 0 ) { ?><button type="button" class="button button-small field-data-remove">X</button><?php } ?>
+				<button type="button" class="button button-small field-data-remove" <?php if ( $i == 0 ) { ?>disabled <?php } ?>>X</button>
 			</div>
 			<?php } ?>
 		</div>
