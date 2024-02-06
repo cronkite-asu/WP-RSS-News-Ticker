@@ -6,7 +6,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class RemoteAPHeadlines extends RemoteJSON {
+class RemoteAPHeadlines extends Remote {
 
 	/**
 	* AP product id to request
