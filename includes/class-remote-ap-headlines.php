@@ -49,7 +49,7 @@ class RemoteAPHeadlines extends RemoteJSON {
 		$this->api_key = $api_key;
 		$this->page_size = $page_size;
 		$this->url = $this->build_url(self::ENDPOINT, array('q' => 'productid:' . $productid, 'include' => 'headline', 'in_my_plan' => 'true', 'page_size' => $page_size));
-		$this->arguments['headers'] = $this->build_headers();
+		$this->arguments = $this->build_arguments();
 		parent::__construct($plugin_name, $version, $this->url, $this->arguments, "get");
 	}
 
@@ -69,13 +69,20 @@ class RemoteAPHeadlines extends RemoteJSON {
 	}
 
 	/**
-	* Creating the headers
+	* Creating the arguments
 	*
 	*/
-	public function build_headers() {
-		$headers = ['x-api-key' => $this->api_key];
+	public function build_arguments() {
+		$arguments = [];
+		$arguments['timeout'] = 30;
+		$arguments['redirection'] = 10;
+		$arguments['httpversion'] = '1.1';
+		$arguments['headers'] = [
+			'x-api-key' => $this->api_key,
+			'Accept-Encoding' => 'gzip',
+		];
 
-		return $headers;
+		return $arguments;
 	}
 
 	protected function parse_ap_headlines($json) {
