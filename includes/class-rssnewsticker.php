@@ -1,20 +1,5 @@
 <?php
 
-/**
- *
- * @since             1.0.0
- * @package           Rssnewsticker
- *
- * @wordpress-plugin
- * Plugin Name:       RSS News Ticker
- * Description:       Create a RSS feed using each line of text as the description field of RSS entry.
- * Version:           1.1.0
- * Author:            Jeremy Leggat
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       rssnewsticker
- */
-
 namespace ASU\CSJ\Rssnewsticker;
 
 // If this file is called directly, abort.
