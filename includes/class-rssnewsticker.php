@@ -99,7 +99,6 @@ class Rssnewsticker {
 		 * The classes responsible for remote html connections.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-remote.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-remote-json.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-remote-ap-headlines.php';
 
 	}
