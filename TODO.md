@@ -10,7 +10,9 @@
 - [ ] Cleanup settings on removal of plugin.
 - [ ] Move registering hooks out of `__construct` methods
 - [ ] add handlers for different API response codes/errors
-- [ ] Retrieve default options with get_option function
+- [ ] Retrieve default options with `get_option` function
+- [ ] Add reset button to custom feed page
+- [ ] Allow inport of csv file for custom feed page
 
 ### In Progress
 
