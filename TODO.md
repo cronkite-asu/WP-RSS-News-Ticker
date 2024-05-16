@@ -11,6 +11,7 @@
 - [ ] Move registering hooks out of `__construct` methods
 - [ ] add handlers for different API response codes/errors
 - [ ] Retrieve default options with `get_option` function
+- [ ] Make option to select input type on custom feed page
 - [ ] Add reset button to custom feed page
 - [ ] Allow inport of csv file for custom feed page
 
