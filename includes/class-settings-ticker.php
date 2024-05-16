@@ -25,7 +25,7 @@ class SettingsTicker extends Settings {
 		$this->fields['ticker_config_section'] = [
 			'name' => 'ticker_custom_section',
 			'title' => 'Custom Ticker Feed',
-			'description' => 'Custom news items display on the ticker.',
+			'description' => 'Enter text to display on the ticker. Each new line of text is a seperate headline for the ticker.',
 			'type' => 'section'
 		];
 
@@ -33,7 +33,7 @@ class SettingsTicker extends Settings {
 			'name' => 'ticker_text',
 			'title' => 'Ticker Text',
 			'description' => 'Custom text to display on the news ticker.',
-			'type' => 'array',
+			'type' => 'textarea',
 			'section' => 'ticker_custom_section',
 			'class' => 'widefat',
 			'default' => [ 'Welcome to '. get_bloginfo( 'name' ) ],
@@ -143,6 +143,58 @@ class SettingsTicker extends Settings {
 			}
 		</style>
 <?php
+	}
+
+	/**
+	 * Sanitizes the textarea field and convert to array.
+	 */
+	protected function sanitize_textarea_field( $value = '' ) {
+		$textarray = explode( "\n", sanitize_textarea_field( $value ) );
+		return $this->sanitize_array_field( $textarray );
+	}
+
+	/**
+	 * Render Textarea input from array
+	 *
+	 * @param $args
+	 * @return void
+	 */
+	public function render_textarea( $args ) {
+		$name = $args['name'];
+		$class = ! empty( $args['class'] ) ? $args['class'] : '';
+		$default = ! empty( $args['default'] ) ? $args['default'] : '';
+		$autocomplete = $args['autocomplete'] ?? '';
+		$rows = $args['rows'] ?? '40';
+		$cols = $args['cols'] ?? '80';
+		$required = $args['required'] ?? false;
+		$tooltip = $args['tooltip'] ?? '';
+		?>
+		<textarea
+			type="text"
+			name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"
+			id="<?php echo esc_attr( $name ); ?>-textarea"
+			rows="<?php echo esc_attr( $rows ); ?>"
+			cols="<?php echo esc_attr( $cols ); ?>"
+			class="<?php echo esc_attr( $class ); ?>"
+<?php if ( ! empty( $autocomplete ) ) { ?>
+			autocomplete="<?php echo esc_attr( $autocomplete ); ?>"
+<?php } ?>
+<?php if ( $required ) { ?>
+			required
+<?php } ?>
+<?php if ( ! empty( $tooltip ) ) { ?>
+			title="<?php echo esc_attr( $tooltip ); ?>"
+<?php } ?>
+			><?php
+				echo esc_attr( implode( "\n", $this->get_option( $name, $default ) ) );
+			?></textarea>
+
+		<?php
+		if ( ! empty( $args['description'] ) ) {
+			?>
+			<p id="<?php echo esc_attr( $name ); ?>-description" class="description" name="<?php echo esc_attr( $this->get_option_key( $name ) ); ?>"><?php echo wp_kses_post( $args['description'] ); ?></p>
+			<?php
+		}
 	}
 
 	/**

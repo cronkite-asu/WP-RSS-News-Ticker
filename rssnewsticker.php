@@ -8,7 +8,7 @@
  * @wordpress-plugin
  * Plugin Name:       RSS News Ticker
  * Description:       Create a RSS feed using each line of text as the description field of RSS entry.
- * Version:           1.1.1
+ * Version:           1.2.0
  * Author:            Jeremy Leggat
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
@@ -28,7 +28,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'RSSNEWSTICKER_VERSION', '1.1.1' );
+define( 'RSSNEWSTICKER_VERSION', '1.2.0' );
 
 /**
  * The core plugin class that is used to define internationalization,

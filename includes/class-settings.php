@@ -223,7 +223,7 @@ abstract class Settings {
 					$input[ $field['name'] ] = sanitize_text_field( $input[ $field['name'] ] );
 					break;
 				case 'textarea':
-					$input[ $field['name'] ] = sanitize_textarea_field( $input[ $field['name'] ] );
+					$input[ $field['name'] ] =  $this->sanitize_textarea_field( $input[ $field['name'] ] );
 					break;
 				case 'select':
 					$input[ $field['name'] ] = $this->sanitize_select_field( $input[ $field['name'] ] );
@@ -240,6 +240,13 @@ abstract class Settings {
 		do_action( $this->id . '_settings_sanitized', $input, $fields, $_POST, $this );
 
 		return $input;
+	}
+
+	/**
+	 * Sanitizes the textarea field.
+	 */
+	protected function sanitize_textarea_field( $value = '' ) {
+		return sanitize_textarea_field( $value );
 	}
 
 	/**
@@ -264,11 +271,12 @@ abstract class Settings {
 	 */
 	protected function sanitize_array_field( $values = [], $field_args = [] ) {
 
+		// Santize entries as text
+		$values = map_deep( $values, 'sanitize_text_field' );
+
 		// Remove empty entries from array
 		$values = array_filter($values);
 
-		// Santize entries as text
-		$values = map_deep( $values, 'sanitize_text_field' );
 		return $values;
 	}
 
@@ -376,8 +384,8 @@ abstract class Settings {
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
 		$autocomplete = $args['autocomplete'] ?? '';
-		$rows = $args['rows'] ?? '4';
-		$cols = $args['cols'] ?? '50';
+		$rows = $args['rows'] ?? '40';
+		$cols = $args['cols'] ?? '80';
 		$required = $args['required'] ?? false;
 		$tooltip = $args['tooltip'] ?? '';
 		?>
@@ -397,9 +405,9 @@ abstract class Settings {
 <?php if ( ! empty( $tooltip ) ) { ?>
 			title="<?php echo esc_attr( $tooltip ); ?>"
 <?php } ?>
-			>
-			<?php echo esc_attr( $this->get_option( $name, $default ) ); ?>
-		</textarea>
+			><?php
+				echo esc_attr( $this->get_option( $name, $default ) );
+			?></textarea>
 
 		<?php
 		if ( ! empty( $args['description'] ) ) {
