@@ -14,6 +14,7 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       rssnewsticker
  * GitHub Plugin URI: https://github.com/cronkite-asu/WP-RSS-News-Ticker
+ * Primary Branch:    main
  */
 
 namespace ASU\CSJ\Rssnewsticker;
