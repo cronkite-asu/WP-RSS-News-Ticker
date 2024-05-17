@@ -4,7 +4,7 @@ Donate link: https://cronkite.asu.edu/
 Tags: comments, spam
 Requires at least: 6.0.1
 Tested up to: 6.5.3
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,9 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 2. This is the second screen shot
 
 == Changelog ==
+
+= 1.2 =
+* Reduce text area for ticker text to 25 rows.
 
 = 1.2 =
 * Change from text fields to a text area for rss entries.

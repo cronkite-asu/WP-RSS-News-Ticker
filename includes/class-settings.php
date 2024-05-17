@@ -384,7 +384,7 @@ abstract class Settings {
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
 		$default = ! empty( $args['default'] ) ? $args['default'] : '';
 		$autocomplete = $args['autocomplete'] ?? '';
-		$rows = $args['rows'] ?? '40';
+		$rows = $args['rows'] ?? '25';
 		$cols = $args['cols'] ?? '80';
 		$required = $args['required'] ?? false;
 		$tooltip = $args['tooltip'] ?? '';
