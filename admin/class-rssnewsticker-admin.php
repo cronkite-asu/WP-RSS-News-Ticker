@@ -3,7 +3,6 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       https://ssnewsticker
  * @since      1.3.0
  *
  * @package    Rssnewsticker

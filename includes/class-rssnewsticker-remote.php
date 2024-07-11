@@ -1,6 +1,6 @@
 <?php
 
-class Remote {
+class Rssnewsticker_Remote {
 
 	/**
 	 * The ID of this plugin.

@@ -118,21 +118,21 @@ class Rssnewsticker {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-rssnewsticker-public.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-transients.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-rss.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-rssnewsticker-public-rss.php';
 
 		/**
 		 * The class responsible for orchestrating the settings and admin pages of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-settings.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-settings-page.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-settings-ticker.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-rssnewsticker-admin-settings.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-rssnewsticker-admin-settings-page.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-rssnewsticker-admin-settings-ticker.php';
 
 		/**
 		 * The classes responsible for remote html connections.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-remote.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-remote-ap-headlines.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-remote.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-remote-ap-headlines.php';
 
 		$this->loader = new Rssnewsticker_Loader();
 
@@ -192,8 +192,8 @@ class Rssnewsticker {
 	 * @since    1.0.0
 	 */
 	public function run() {
-		$this->settings = new SettingsPage( $this->get_plugin_name(), $this->get_version() );
-		$this->ticker = new SettingsTicker( $this->get_plugin_name(), $this->get_version() );
+		$this->settings = new Rssnewsticker_Admin_Settings_Page( $this->get_plugin_name(), $this->get_version() );
+		$this->ticker = new Rssnewsticker_Admin_Settings_Ticker( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->run();
 	}
 
@@ -249,7 +249,7 @@ class Rssnewsticker {
 	}
 
 	public function add_rss_feed() {
-		$rss_feed = new Rssnewsticker_RSS( $this->get_plugin_name(), $this->get_version(), $this->get_ticker(), $this->get_settings() );
+		$rss_feed = new Rssnewsticker_Public_RSS( $this->get_plugin_name(), $this->get_version(), $this->get_ticker(), $this->get_settings() );
 		add_feed($this->settings->get_option('feed_name'), array( $rss_feed, 'render_rss_feed' ));
 	}
 

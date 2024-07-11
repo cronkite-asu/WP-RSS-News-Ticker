@@ -16,7 +16,7 @@
  * @subpackage Rssnewsticker/includes
  * @author     Jeremy Leggat <jleggat@asu.edu>
  */
-class Rssnewsticker_RSS {
+class Rssnewsticker_Public_RSS {
 
 	/**
 	 * The unique identifier of this plugin.
@@ -110,7 +110,7 @@ class Rssnewsticker_RSS {
 		$headlines = [];
 
 		if ($enabled === 1) {
-			$remote_request = new RemoteAPHeadlines( $this->plugin_name, $this->version, $productid, $api_key, $page_size );
+			$remote_request = new Rssnewsticker_Remote_AP_Headlines( $this->plugin_name, $this->version, $productid, $api_key, $page_size );
 			$headlines = $remote_request->read_ap_headlines();
 
 			array_unshift($headlines, $pre_feed);
