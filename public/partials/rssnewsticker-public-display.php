@@ -5,8 +5,7 @@
  *
  * This file is used to markup the public-facing aspects of the plugin.
  *
- * @link       https://ssnewsticker
- * @since      1.0.0
+ * @since      1.3.0
  *
  * @package    Rssnewsticker
  * @subpackage Rssnewsticker/public/partials
