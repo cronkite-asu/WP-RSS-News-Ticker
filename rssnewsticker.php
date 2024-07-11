@@ -8,7 +8,7 @@
  * @wordpress-plugin
  * Plugin Name:       RSS News Ticker
  * Description:       Create a RSS feed using each line of text as the description field of RSS entry.
- * Version:           1.2.1
+ * Version:           1.3.0
  * Author:            Jeremy Leggat
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
@@ -16,8 +16,6 @@
  * GitHub Plugin URI: https://github.com/cronkite-asu/WP-RSS-News-Ticker
  * Primary Branch:    main
  */
-
-namespace ASU\CSJ\Rssnewsticker;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -29,7 +27,33 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'RSSNEWSTICKER_VERSION', '1.2.1' );
+define( 'RSSNEWSTICKER_VERSION', '1.3.0' );
+
+/**
+ * Plugin name.
+ */
+define( 'RSSNEWSTICKER_PLUGIN_NAME', 'rssnewsticker' );
+
+/**
+ * The code that runs during plugin activation.
+ * This action is documented in includes/class-rssnewsticker-activator.php
+ */
+function activate_rssnewsticker() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-rssnewsticker-activator.php';
+	Rssnewsticker_Activator::activate();
+}
+
+/**
+ * The code that runs during plugin deactivation.
+ * This action is documented in includes/class-rssnewsticker-deactivator.php
+ */
+function deactivate_rssnewsticker() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-rssnewsticker-deactivator.php';
+	Rssnewsticker_Deactivator::deactivate(RSSNEWSTICKER_PLUGIN_NAME);
+}
+
+register_activation_hook( __FILE__, 'activate_rssnewsticker' );
+register_deactivation_hook( __FILE__, 'deactivate_rssnewsticker' );
 
 /**
  * The core plugin class that is used to define internationalization,

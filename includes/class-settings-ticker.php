@@ -1,10 +1,4 @@
 <?php
-namespace ASU\CSJ\Rssnewsticker;
-
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
 
 class SettingsTicker extends Settings {
 

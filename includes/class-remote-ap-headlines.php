@@ -1,10 +1,4 @@
 <?php
-namespace ASU\CSJ\Rssnewsticker;
-
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
 
 class RemoteAPHeadlines extends Remote {
 
@@ -95,27 +89,16 @@ class RemoteAPHeadlines extends Remote {
 		return $lines;
 	}
 
-	/**
-	* Creating key to prefix transients
-	*
-	*/
-	public function get_transient_prefix() {
-		$prefix = $this->plugin_name . '_' . md5( $this->version . __CLASS__ . $this->url );
-
-		return $prefix;
-	}
-
 	public function get_ap_headlines() {
-		$transient_name = $this->get_transient_prefix() . __FUNCTION__;
-		$headlines = get_transient( $transient_name );
-
-		if ( false === $headlines ) {
-			$this->run();
-
-			$headlines = $this->parse_ap_headlines($this->body);
-			set_transient( $transient_name, $headlines, $this->expiration);
-		}
-
+		$this->run();
+		$headlines = $this->parse_ap_headlines($this->body);
 		return $headlines;
 	}
+
+	public function read_ap_headlines() {
+		$transient_name = Rssnewsticker_Transients::get_transient_name($this->plugin_name, __FUNCTION__);
+		$headlines = Rssnewsticker_Transients::set_transient($transient_name, array($this, 'get_ap_headlines'), $this->expiration);
+		return $headlines;
+	}
+
 }

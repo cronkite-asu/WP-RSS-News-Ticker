@@ -2,6 +2,7 @@
 
 ### Todo
 
+- [ ] Save RSS Items as custom post type.
 - [ ] Cache Feed.
   - [x] Use tranisents to cache API calls.
   - [ ] Check if feed is updated with etag header

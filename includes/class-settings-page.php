@@ -1,10 +1,4 @@
 <?php
-namespace ASU\CSJ\Rssnewsticker;
-
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
 
 class SettingsPage extends Settings {
 
@@ -16,6 +10,8 @@ class SettingsPage extends Settings {
 
 		$this->define_fields();
 		add_action( $this->id . '_settings_sanitized', [ $this, 'sanitize_callback' ], 10, 4 );
+		add_action( 'add_option_' . $this->get_option_name(), [ $this, 'add_option_callback' ], 10, 1);
+		add_action( 'update_option_' . $this->get_option_name(), [ $this, 'update_option_callback' ], 10, 2);
 
 		parent::__construct( $plugin_name, $version );
 	}
@@ -182,6 +178,22 @@ class SettingsPage extends Settings {
 	public function sanitize_callback( $input, $fields, $post, $obj ) {
 		if ( ! wp_http_validate_url( site_url('/feed/') . $input['feed_name'] ) ) {
 			wp_die( "Invalid Feed Name" );
+		}
+	}
+
+	/**
+	 * Update options callback.
+	 */
+	public function add_option_callback( $value ) {
+		delete_option( 'rewrite_rules' );
+	}
+
+	/**
+	 * Update options callback.
+	 */
+	public function update_option_callback( $old_value, $value ) {
+		if ( $old_value['feed_name'] != $value['feed_name'] ) {
+			delete_option( 'rewrite_rules' );
 		}
 	}
 }

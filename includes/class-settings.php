@@ -1,10 +1,4 @@
 <?php
-namespace ASU\CSJ\Rssnewsticker;
-
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
 
 abstract class Settings {
 
@@ -179,7 +173,7 @@ abstract class Settings {
 
 		register_setting(
 			$this->id . '_settings_page',				// $option_group
-			$this->id . '_options',					// $option_name
+			$this->get_option_name(),					// $option_name
 			[ 'sanitize_callback' => [ $this, 'sanitize' ] ]	// $args
 		);
 
@@ -281,13 +275,22 @@ abstract class Settings {
 	}
 
 	/**
+	 * Get option name. Useful for referencing the option.
+	 *
+	 * @return string
+	 */
+	public function get_option_name( ) {
+		return $this->id . '_options';
+	}
+
+	/**
 	 * Get option key. Useful for name attributes in forms.
 	 *
 	 * @param string $key Field Name.
 	 * @return string
 	 */
 	public function get_option_key( $key ) {
-		return $this->id . '_options[' . $key . ']';
+		return $this->get_option_name() . '[' . $key . ']';
 	}
 
 	/**
@@ -298,7 +301,7 @@ abstract class Settings {
 	 * @return mixed|string
 	 */
 	public function get_option( $id, $default = '' ) {
-		$options = get_option( $this->id . '_options' );
+		$options = get_option( $this->get_option_name() );
 
 		return isset( $options[ $id ] ) ? $options[ $id ] : $default;
 	}

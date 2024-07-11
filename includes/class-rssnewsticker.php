@@ -1,13 +1,16 @@
 <?php
 
-namespace ASU\CSJ\Rssnewsticker;
-
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
-
 class Rssnewsticker {
+
+	/**
+	 * The loader that's responsible for maintaining and registering all hooks that power
+	 * the plugin.
+	 *
+	 * @since    1.3.0
+	 * @access   protected
+	 * @var      Rssnewsticker_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 */
+	protected $loader;
 
 	/**
 	 * The unique identifier of this plugin.
@@ -40,7 +43,7 @@ class Rssnewsticker {
 	protected $page;
 
 	/**
-	 * TIcker
+	 * Ticker
 	 * @var [type]
 	 */
 	protected $ticker;
@@ -60,10 +63,15 @@ class Rssnewsticker {
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'rssnewsticker';
+
+		if ( defined( 'RSSNEWSTICKER_PLUGIN_NAME' ) ) {
+			$this->plugin_name = RSSNEWSTICKER_PLUGIN_NAME;
+		} else {
+			$this->plugin_name = 'rssnewsticker';
+		}
 
 		$this->load_dependencies();
-
+		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
@@ -88,6 +96,31 @@ class Rssnewsticker {
 	private function load_dependencies() {
 
 		/**
+		 * The class responsible for orchestrating the actions and filters of the
+		 * core plugin.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-loader.php';
+
+		/**
+		 * The class responsible for defining internationalization functionality
+		 * of the plugin.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-i18n.php';
+
+		/**
+		 * The class responsible for defining all actions that occur in the admin area.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-rssnewsticker-admin.php';
+
+		/**
+		 * The class responsible for defining all actions that occur in the public-facing
+		 * side of the site.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-rssnewsticker-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-transients.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-rss.php';
+
+		/**
 		 * The class responsible for orchestrating the settings and admin pages of the
 		 * core plugin.
 		 */
@@ -101,6 +134,25 @@ class Rssnewsticker {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-remote.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-remote-ap-headlines.php';
 
+		$this->loader = new Rssnewsticker_Loader();
+
+	}
+
+	/**
+	 * Define the locale for this plugin for internationalization.
+	 *
+	 * Uses the Rssnewsticker_i18n class in order to set the domain and to register the hook
+	 * with WordPress.
+	 *
+	 * @since    1.3.0
+	 * @access   private
+	 */
+	private function set_locale() {
+
+		$plugin_i18n = new Rssnewsticker_i18n();
+
+		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+
 	}
 
 	/**
@@ -112,6 +164,10 @@ class Rssnewsticker {
 	 */
 	private function define_admin_hooks() {
 
+		$plugin_admin = new Rssnewsticker_Admin( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 	}
 
 	/**
@@ -123,7 +179,11 @@ class Rssnewsticker {
 	 */
 	private function define_public_hooks() {
 
-		add_action('init', array( $this, 'add_rss_feed'));
+		$plugin_public = new Rssnewsticker_Public( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'init', $this, 'add_rss_feed' );
 	}
 
 	/**
@@ -134,6 +194,7 @@ class Rssnewsticker {
 	public function run() {
 		$this->settings = new SettingsPage( $this->get_plugin_name(), $this->get_version() );
 		$this->ticker = new SettingsTicker( $this->get_plugin_name(), $this->get_version() );
+		$this->loader->run();
 	}
 
 	/**
@@ -148,6 +209,16 @@ class Rssnewsticker {
 	}
 
 	/**
+	 * The reference to the class that orchestrates the hooks with the plugin.
+	 *
+	 * @since     1.3.0
+	 * @return    Rssnewsticker_Loader    Orchestrates the hooks of the plugin.
+	 */
+	public function get_loader() {
+		return $this->loader;
+	}
+
+	/**
 	 * Retrieve the version number of the plugin.
 	 *
 	 * @since     1.0.0
@@ -157,64 +228,29 @@ class Rssnewsticker {
 		return $this->version;
 	}
 
+	/**
+	 * Retrieve the ticker options.
+	 *
+	 * @since     1.3.0
+	 * @return    ticker    The ticker options.
+	 */
+	public function get_ticker() {
+		return $this->ticker;
+	}
+
+	/**
+	 * Retrieve the plugin's admin settings.
+	 *
+	 * @since     1.3.0
+	 * @return    ticker    The admin settings.
+	 */
+	public function get_settings() {
+		return $this->settings;
+	}
+
 	public function add_rss_feed() {
-		add_feed($this->settings->get_option('feed_name'), array( $this, 'render_rss_feed' ));
-	}
-
-	public function render_rss_feed () {
-		$localnews = $this->fetch_local_headlines();
-		$apnews = $this->fetch_ap_headlines();
-		$lines = array_merge($localnews, $apnews);
-
-		define('DONOTCACHEPAGE', true);
-		header('Content-Type: application/rss+xml');
-		echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.">";
-		do_action('rss_tag_pre', 'rss2');
-?>
-
-<rss version="2.0" <?php do_action('rss2_ns'); ?>>
-	<channel>
-		<title><?php bloginfo_rss('name'); ?> - Ticker Feed</title>
-		<link><?php bloginfo_rss('url') ?></link>
-		<description><?php bloginfo_rss('description') ?></description>
-<?php		do_action('rss2_head'); ?>
-
-<?php
-		foreach ($lines as $line) {
-			$line = sanitize_text_field($line);
-?>
-		<item>
-			<description><![CDATA[<?php echo sanitize_text_field($line) ?>]]></description>
-<?php			do_action('rss2_item'); ?>
-		</item>
-<?php		}; ?>
-	</channel>
-</rss>
-<?php
-	}
-
-	public function fetch_local_headlines() {
-		$text = $this->ticker->get_option('ticker_text');
-
-		return $text;
-	}
-
-	public function fetch_ap_headlines() {
-		$enabled = $this->settings->get_option('ap_enable');
-		$productid = $this->settings->get_option('ap_productid');
-		$page_size = $this->settings->get_option('ap_page_size');
-		$api_key = $this->settings->get_option('ap_api_key');
-		$pre_feed = $this->settings->get_option('ap_pre_feed');
-
-		$headlines = [];
-
-		if ($enabled === 1) {
-			$remote_request = new RemoteAPHeadlines( $this->get_plugin_name(), $this->get_version(), $productid, $api_key, $page_size );
-			$headlines = $remote_request->get_ap_headlines();
-
-			array_unshift($headlines, $pre_feed);
-		}
-		return $headlines;
+		$rss_feed = new Rssnewsticker_RSS( $this->get_plugin_name(), $this->get_version(), $this->get_ticker(), $this->get_settings() );
+		add_feed($this->settings->get_option('feed_name'), array( $rss_feed, 'render_rss_feed' ));
 	}
 
 }
