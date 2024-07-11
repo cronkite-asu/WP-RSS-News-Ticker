@@ -1,6 +1,6 @@
 <?php
 
-class SettingsTicker extends Settings {
+class Rssnewsticker_Admin_Settings_Ticker extends Rssnewsticker_Admin_Settings {
 
 	public function __construct( $plugin_name, $version ) {
 		$this->id = $plugin_name . '_local_feed';

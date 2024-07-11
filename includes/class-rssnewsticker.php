@@ -124,9 +124,9 @@ class Rssnewsticker {
 		 * The class responsible for orchestrating the settings and admin pages of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-settings.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-settings-page.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-settings-ticker.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-rssnewsticker-admin-settings.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-rssnewsticker-admin-settings-page.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-rssnewsticker-admin-settings-ticker.php';
 
 		/**
 		 * The classes responsible for remote html connections.
@@ -192,8 +192,8 @@ class Rssnewsticker {
 	 * @since    1.0.0
 	 */
 	public function run() {
-		$this->settings = new SettingsPage( $this->get_plugin_name(), $this->get_version() );
-		$this->ticker = new SettingsTicker( $this->get_plugin_name(), $this->get_version() );
+		$this->settings = new Rssnewsticker_Admin_Settings_Page( $this->get_plugin_name(), $this->get_version() );
+		$this->ticker = new Rssnewsticker_Admin_Settings_Ticker( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->run();
 	}
 

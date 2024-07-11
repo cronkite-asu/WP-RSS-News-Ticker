@@ -1,6 +1,6 @@
 <?php
 
-class SettingsPage extends Settings {
+class Rssnewsticker_Admin_Settings_Page extends Rssnewsticker_Admin_Settings {
 
 	public function __construct( $plugin_name, $version ) {
 		$this->id = $plugin_name;

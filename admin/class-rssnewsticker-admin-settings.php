@@ -1,6 +1,6 @@
 <?php
 
-abstract class Settings {
+abstract class Rssnewsticker_Admin_Settings {
 
 	/**
 	 * Setting ID. Prefixes all options.
