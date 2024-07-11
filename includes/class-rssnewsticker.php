@@ -131,8 +131,8 @@ class Rssnewsticker {
 		/**
 		 * The classes responsible for remote html connections.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-remote.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-remote-ap-headlines.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-remote.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-remote-ap-headlines.php';
 
 		$this->loader = new Rssnewsticker_Loader();
 
