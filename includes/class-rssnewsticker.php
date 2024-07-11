@@ -113,14 +113,6 @@ class Rssnewsticker {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-rssnewsticker-admin.php';
 
 		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-rssnewsticker-public.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-transients.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-rssnewsticker-public-rss.php';
-
-		/**
 		 * The class responsible for orchestrating the settings and admin pages of the
 		 * core plugin.
 		 */
@@ -129,7 +121,23 @@ class Rssnewsticker {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-rssnewsticker-admin-settings-ticker.php';
 
 		/**
-		 * The classes responsible for remote html connections.
+		 * The class responsible for defining transient functionality.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-transients.php';
+
+		/**
+		 * The class responsible for defining all actions that occur in the public-facing
+		 * side of the site.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-rssnewsticker-public.php';
+
+		/**
+		 * The class responsible for defining custom RSS feed functionality.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-rssnewsticker-public-rss.php';
+
+		/**
+		 * The classes responsible for remote html connection functionality.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-remote.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-remote-ap-headlines.php';
