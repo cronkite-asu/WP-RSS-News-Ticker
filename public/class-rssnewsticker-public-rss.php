@@ -16,7 +16,7 @@
  * @subpackage Rssnewsticker/includes
  * @author     Jeremy Leggat <jleggat@asu.edu>
  */
-class Rssnewsticker_RSS {
+class Rssnewsticker_Public_RSS {
 
 	/**
 	 * The unique identifier of this plugin.

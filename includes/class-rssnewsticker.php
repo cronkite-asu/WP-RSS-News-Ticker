@@ -118,7 +118,7 @@ class Rssnewsticker {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-rssnewsticker-public.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-transients.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-rssnewsticker-rss.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-rssnewsticker-public-rss.php';
 
 		/**
 		 * The class responsible for orchestrating the settings and admin pages of the
@@ -249,7 +249,7 @@ class Rssnewsticker {
 	}
 
 	public function add_rss_feed() {
-		$rss_feed = new Rssnewsticker_RSS( $this->get_plugin_name(), $this->get_version(), $this->get_ticker(), $this->get_settings() );
+		$rss_feed = new Rssnewsticker_Public_RSS( $this->get_plugin_name(), $this->get_version(), $this->get_ticker(), $this->get_settings() );
 		add_feed($this->settings->get_option('feed_name'), array( $rss_feed, 'render_rss_feed' ));
 	}
 
