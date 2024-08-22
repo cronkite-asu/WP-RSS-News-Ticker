@@ -116,7 +116,7 @@ abstract class Rssnewsticker_Admin_Settings {
 				// Render fields and sections.
 				do_settings_sections( $this->id . '_settings_page' );
 
-				do_action( 'pmpro_' . $this->id . '_settings_before_submit_button' );
+				do_action( $this->id . '_settings_before_submit_button' );
 
 				submit_button(...$this->submit_args);
 
