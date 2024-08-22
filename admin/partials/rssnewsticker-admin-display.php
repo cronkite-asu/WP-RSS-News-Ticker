@@ -1,5 +1,7 @@
 <?php
 
+namespace RSS_News_Ticker;
+
 /**
  * Provide a admin area view for the plugin
  *

@@ -1,5 +1,7 @@
 <?php
 
+namespace RSS_News_Ticker;
+
 /**
  * The public-facing functionality of the plugin.
  *

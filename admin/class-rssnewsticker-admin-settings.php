@@ -1,5 +1,7 @@
 <?php
 
+namespace RSS_News_Ticker;
+
 abstract class Rssnewsticker_Admin_Settings {
 
 	/**

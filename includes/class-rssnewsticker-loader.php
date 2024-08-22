@@ -1,5 +1,7 @@
 <?php
 
+namespace RSS_News_Ticker;
+
 /**
  * Register all actions and filters for the plugin
  *

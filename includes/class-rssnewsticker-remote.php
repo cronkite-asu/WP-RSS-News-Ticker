@@ -1,5 +1,7 @@
 <?php
 
+namespace RSS_News_Ticker;
+
 class Rssnewsticker_Remote {
 
 	/**

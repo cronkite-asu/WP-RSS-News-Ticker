@@ -67,8 +67,11 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
+= 2.0.1 =
+* Add php namespace to code.
+
 = 2.0 =
-* Refactored class files with admina and public classes.
+* Refactored class files with admin and public classes.
 
 = 1.3 =
 * Flush rewrite rules in activation hook.
