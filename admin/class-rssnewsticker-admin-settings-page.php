@@ -173,7 +173,7 @@ class Rssnewsticker_Admin_Settings_Page extends Rssnewsticker_Admin_Settings {
 	}
 
 	/**
-	 * Sanitizes the checkbox field.
+	 * Sanitizes the feed name field.
 	 */
 	public function sanitize_callback( $input, $fields, $post, $obj ) {
 		if ( ! wp_http_validate_url( site_url('/feed/') . $input['feed_name'] ) ) {
