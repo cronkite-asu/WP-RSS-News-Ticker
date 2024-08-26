@@ -2,9 +2,10 @@
 Contributors: (this should be a list of wordpress.org userid's)
 Donate link: https://cronkite.asu.edu/
 Tags: comments, spam
-Requires at least: 6.0.1
-Tested up to: 6.5.3
+Requires at least: 6.0
+Tested up to: 6.6
 Stable tag: 2.0.0
+Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +67,9 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 2. This is the second screen shot
 
 == Changelog ==
+
+= 2.0.2 =
+* Add plugin header configuration.
 
 = 2.0.1 =
 * Add php namespace to code.
