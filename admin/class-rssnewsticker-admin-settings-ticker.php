@@ -1,7 +1,5 @@
 <?php
 
-namespace RSS_News_Ticker;
-
 class Rssnewsticker_Admin_Settings_Ticker extends Rssnewsticker_Admin_Settings {
 
 	public function __construct( $plugin_name, $version ) {

@@ -1,7 +1,5 @@
 <?php
 
-namespace RSS_News_Ticker;
-
 /**
  * Define the transients functionality
  *

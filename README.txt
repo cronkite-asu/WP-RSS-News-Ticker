@@ -68,6 +68,9 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
+= 2.0.3 =
+* Remove Namespace, I was being extra when I added it.
+
 = 2.0.2 =
 * Add plugin header configuration.
 

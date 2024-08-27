@@ -1,7 +1,5 @@
 <?php
 
-namespace RSS_News_Ticker;
-
 /**
  * The admin-specific functionality of the plugin.
  *

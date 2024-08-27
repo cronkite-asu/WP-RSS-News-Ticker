@@ -1,7 +1,5 @@
 <?php
 
-namespace RSS_News_Ticker;
-
 /**
  *
  * @since             1.0.0
@@ -10,7 +8,7 @@ namespace RSS_News_Ticker;
  * @wordpress-plugin
  * Plugin Name:       RSS News Ticker
  * Description:       Create a RSS feed using each line of text as the description field of RSS entry.
- * Version:           2.0.2
+ * Version:           2.0.3
  * Requires at least: 6.0
  * Requires PHP:      7.2
  * Author:            Jeremy Leggat
@@ -31,7 +29,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'RSSNEWSTICKER_VERSION', '2.0.2' );
+define( 'RSSNEWSTICKER_VERSION', '2.0.3' );
 
 /**
  * Plugin name.
@@ -56,8 +54,8 @@ function deactivate_rssnewsticker() {
 	Rssnewsticker_Deactivator::deactivate(RSSNEWSTICKER_PLUGIN_NAME);
 }
 
-register_activation_hook( __FILE__,  __NAMESPACE__ . '/activate_rssnewsticker' );
-register_deactivation_hook( __FILE__,  __NAMESPACE__ . '/deactivate_rssnewsticker' );
+register_activation_hook( __FILE__, 'activate_rssnewsticker' );
+register_deactivation_hook( __FILE__, 'deactivate_rssnewsticker' );
 
 /**
  * The core plugin class that is used to define internationalization,
