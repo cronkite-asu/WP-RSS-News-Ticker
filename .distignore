@@ -25,13 +25,16 @@ package.json
 package-lock.json
 phpunit.xml
 phpunit.xml.dist
+.markdownlintignore
 multisite.xml
 multisite.xml.dist
 .phpcs.xml
 phpcs.xml
 .phpcs.xml.dist
 phpcs.xml.dist
+.prettierignore
 README.md
+.stylelintignore
 webpack.config.js
 wp-cli.local.yml
 yarn.lock
