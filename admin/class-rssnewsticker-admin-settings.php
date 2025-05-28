@@ -512,7 +512,6 @@ abstract class Rssnewsticker_Admin_Settings {
 		$autocomplete = $args['autocomplete'] ?? '';
 		$choices = ! empty( $args['choices'] ) ? $args['choices'] : [];
 		$size = ! empty( $args['size'] ) ? $args['size'] : '';
-		$choices = ! empty( $args['choices'] ) ? $args['choices'] : [];
 		$required = $args['required'] ?? false;
 		$tooltip = $args['tooltip'] ?? '';
 		?>
